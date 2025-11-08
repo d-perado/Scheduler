@@ -3,6 +3,8 @@ package org.example.scheduler.service;
 import org.example.scheduler.dto.schedule.*;
 import org.example.scheduler.entity.Schedule;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.entity.User;
+import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.ScheduleValidator;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.repository.ScheduleRepository;
@@ -12,11 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
     private final ScheduleValidator scheduleValidator;
 
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
-        Schedule schedule = new Schedule(request.getTitle(), request.getContent(), request.getWriter());
+        User findedUser = userRepository.findById(request.getUserId()).orElseThrow(
+                ()-> new IllegalStateException("존재하지 않는 유저입니다."));
+
+        Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
@@ -36,6 +42,7 @@ public class ScheduleService {
 
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request) {
+
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
         findedSchedule.modify(request.getTitle(), request.getContent());

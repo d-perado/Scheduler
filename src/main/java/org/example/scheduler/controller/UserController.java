@@ -3,7 +3,6 @@ package org.example.scheduler.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.service.UserService;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

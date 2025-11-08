@@ -20,14 +20,15 @@ public class Schedule extends TimeBaseEntity {
     @Column
     private String content;
 
-    @Column
-    private String writer;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Schedule(String title, String content, String writer) {
+    public Schedule(String title, String content, User user) {
         super();
         this.title = title;
         this.content = content;
-        this.writer = writer;
+        this.user = user;
     }
 
     public void modify(String title, String content) {

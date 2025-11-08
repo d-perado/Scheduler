@@ -18,7 +18,7 @@ public class ScheduleDTO {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
-        this.writer = schedule.getWriter();
+        this.writer = schedule.getUser().getName();
         this.createdAt = schedule.getCreatedAt();
         this.updatedAt = schedule.getUpdatedAt();
     }
