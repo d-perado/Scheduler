@@ -1,13 +1,11 @@
-package org.example.scheduler.dto;
+package org.example.scheduler.dto.schedule;
 
 import org.example.scheduler.entity.Schedule;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
 public class ScheduleDTO {
     private final Long id;
     private final String title;
