@@ -3,6 +3,7 @@ package org.example.scheduler.service;
 import org.example.scheduler.dto.schedule.*;
 import org.example.scheduler.entity.Schedule;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.util.ScheduleValidator;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleValidator scheduleValidator;
 
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request){
@@ -25,8 +27,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public GetScheduleResponse getSchedule(Long scheduleId){
-        Schedule findedSchedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(()-> new IllegalStateException("일정이 존재하지 않습니다."));
+        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
         ScheduleDTO findedScheduleDTO = new ScheduleDTO(findedSchedule);
 
@@ -35,8 +36,7 @@ public class ScheduleService {
 
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request){
-        Schedule findedSchedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(()-> new IllegalStateException(("일정이 존재하지 않습니다.")));
+        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
         findedSchedule.modify(request.getTitle(),request.getContent());
 

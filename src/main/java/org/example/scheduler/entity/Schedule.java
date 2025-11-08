@@ -13,10 +13,13 @@ public class Schedule extends TimeBaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String title;
+
     @Column
     private String content;
+
     @Column
     private String writer;
 
