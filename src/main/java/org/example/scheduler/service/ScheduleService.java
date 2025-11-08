@@ -15,7 +15,7 @@ public class ScheduleService {
     private final ScheduleValidator scheduleValidator;
 
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request){
+    public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), request.getWriter());
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
@@ -26,7 +26,7 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public GetScheduleResponse getSchedule(Long scheduleId){
+    public GetScheduleResponse getSchedule(Long scheduleId) {
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
         ScheduleDTO findedScheduleDTO = new ScheduleDTO(findedSchedule);
@@ -35,10 +35,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request){
+    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request) {
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        findedSchedule.modify(request.getTitle(),request.getContent());
+        findedSchedule.modify(request.getTitle(), request.getContent());
 
         ScheduleDTO modifiedScheduleDTO = new ScheduleDTO(findedSchedule);
 
@@ -49,7 +49,7 @@ public class ScheduleService {
     public void deleteSchedule(Long scheduleId) {
         boolean existence = scheduleRepository.existsById(scheduleId);
 
-        if(existence) {
+        if (existence) {
             scheduleRepository.deleteById(scheduleId);
         }
     }

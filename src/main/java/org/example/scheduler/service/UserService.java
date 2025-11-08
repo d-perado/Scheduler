@@ -1,6 +1,8 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.user.*;
+import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -8,4 +10,52 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
+    public CreateUserResponse createUser(CreateUserRequest request) {
+        boolean existence = userRepository.existsByEmail(request.getEmail());
+
+        if (existence) {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+
+        User user = new User(request.getName(),
+                request.getEmail(),
+                request.getPassword());
+
+        User savedUser = userRepository.save(user);
+
+        UserDTO savedUserDTO = new UserDTO(savedUser);
+
+        return new CreateUserResponse(savedUserDTO);
+    }
+
+    public GetUserResponse getUserById(Long userId) {
+        User findedUser = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("존재하지 않는 유저입니다."));
+
+        UserDTO userDTO = new UserDTO(findedUser);
+
+        return new GetUserResponse(userDTO);
+    }
+
+    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
+        User findedUser = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("존재하지 않는 유저입니다."));
+
+        findedUser.modify(request.getName(), request.getEmail());
+
+        UserDTO userDTO = new UserDTO(findedUser);
+
+        return new UpdateUserResponse(userDTO);
+    }
+
+    public void deleteUser(Long userId) {
+        boolean existence = userRepository.existsById(userId);
+
+        if (!existence) {
+            throw new IllegalStateException("존재하지 않는 유저입니다.");
+        }
+
+        userRepository.deleteById(userId);
+    }
 }

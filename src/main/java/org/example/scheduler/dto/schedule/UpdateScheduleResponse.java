@@ -13,7 +13,7 @@ public class UpdateScheduleResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public UpdateScheduleResponse(ScheduleDTO scheduleDTO){
+    public UpdateScheduleResponse(ScheduleDTO scheduleDTO) {
         this.id = scheduleDTO.getId();
         this.title = scheduleDTO.getTitle();
         this.content = scheduleDTO.getContent();

@@ -14,7 +14,7 @@ public class ScheduleDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public ScheduleDTO(Schedule schedule){
+    public ScheduleDTO(Schedule schedule) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();

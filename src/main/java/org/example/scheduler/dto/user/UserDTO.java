@@ -13,7 +13,7 @@ public class UserDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public UserDTO(User user){
+    public UserDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
