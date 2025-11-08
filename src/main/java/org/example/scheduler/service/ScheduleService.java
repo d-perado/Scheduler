@@ -5,12 +5,14 @@ import org.example.scheduler.entity.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.repository.ScheduleRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request){
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), request.getWriter());
 
@@ -21,6 +23,7 @@ public class ScheduleService {
         return new CreateScheduleResponse(savedScheduleDTO);
     }
 
+    @Transactional(readOnly = true)
     public GetScheduleResponse getSchedule(Long scheduleId){
         Schedule findedSchedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(()-> new IllegalStateException("일정이 존재하지 않습니다."));
@@ -30,6 +33,7 @@ public class ScheduleService {
         return new GetScheduleResponse(findedScheduleDTO);
     }
 
+    @Transactional
     public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request){
         Schedule findedSchedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(()-> new IllegalStateException(("일정이 존재하지 않습니다.")));
@@ -39,5 +43,14 @@ public class ScheduleService {
         ScheduleDTO modifiedScheduleDTO = new ScheduleDTO(findedSchedule);
 
         return new UpdateScheduleResponse(modifiedScheduleDTO);
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId) {
+        boolean existence = scheduleRepository.existsById(scheduleId);
+
+        if(existence) {
+            scheduleRepository.deleteById(scheduleId);
+        }
     }
 }
