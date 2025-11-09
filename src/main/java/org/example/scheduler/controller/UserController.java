@@ -29,13 +29,19 @@ public class UserController {
             @RequestBody LoginRequest request,
             HttpSession session){
 
-        SessionUserDTO sessionUserDTO = userService.login(request);
+        try {
+            SessionUserDTO sessionUserDTO = userService.login(request);
 
-        session.setAttribute("loginUser",sessionUserDTO);
+            session.setAttribute("loginUser",sessionUserDTO);
 
-        LoginResponse result = new LoginResponse(sessionUserDTO);
+            LoginResponse result = new LoginResponse(sessionUserDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
     }
 
     @GetMapping("/users/{userId}")
