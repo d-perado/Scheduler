@@ -48,6 +48,7 @@ public class UserController {
     public ResponseEntity<GetUserResponse> handlerGetUserById(
             @PathVariable Long userId
     ) {
+
         GetUserResponse result = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -61,6 +62,17 @@ public class UserController {
         UpdateUserResponse result = userService.updateUser(userId,request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser,HttpSession session) {
+        if(sessionUser==null) {
+            return ResponseEntity.badRequest().build();
+        }
+        session.invalidate();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/users/{userId}")
