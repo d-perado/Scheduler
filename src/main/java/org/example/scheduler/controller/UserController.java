@@ -1,6 +1,9 @@
 package org.example.scheduler.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.login.LoginRequest;
+import org.example.scheduler.dto.login.LoginResponse;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-
     @PostMapping("/users")
     public ResponseEntity<CreateUserResponse> handlerCreateUser(
             @RequestBody CreateUserRequest request
@@ -20,6 +22,20 @@ public class UserController {
         CreateUserResponse result = userService.createUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @RequestBody LoginRequest request,
+            HttpSession session){
+
+        SessionUserDTO sessionUserDTO = userService.login(request);
+
+        session.setAttribute("loginUser",sessionUserDTO);
+
+        LoginResponse result = new LoginResponse(sessionUserDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/users/{userId}")

@@ -2,6 +2,7 @@ package org.example.scheduler.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ public class User extends TimeBaseEntity {
     @Email
     private String email;
 
+    @Getter
     @Column
     private String password;
 
@@ -36,5 +38,9 @@ public class User extends TimeBaseEntity {
     public void modify(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+
+    public boolean isEmpty(){
+        return this.email.isEmpty();
     }
 }

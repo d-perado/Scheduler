@@ -1,6 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.login.LoginRequest;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.UserRepository;
@@ -57,5 +58,16 @@ public class UserService {
         }
 
         userRepository.deleteById(userId);
+    }
+
+    public SessionUserDTO login(LoginRequest request){
+        User findedUser = userRepository.findUserByEmail(request.getEmail()).orElseThrow(
+                ()-> new IllegalStateException("가입되지 않은 이메일입니다."));
+
+        if(!findedUser.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+        }
+
+        return new SessionUserDTO(findedUser.getId(), findedUser.getEmail());
     }
 }
