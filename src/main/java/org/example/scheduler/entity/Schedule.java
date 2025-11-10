@@ -20,8 +20,8 @@ public class Schedule extends TimeBaseEntity {
     @Column
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Schedule(String title, String content, User user) {
