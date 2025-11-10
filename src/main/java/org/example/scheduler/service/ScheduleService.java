@@ -43,9 +43,13 @@ public class ScheduleService {
     }
 
     @Transactional
-    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request) {
+    public UpdateScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
 
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
+
+        if(!findedSchedule.getId().equals(userId)){
+            throw new IllegalArgumentException("작성자 본인이 아닙니다.");
+        }
 
         findedSchedule.modify(request.getTitle(), request.getContent());
 
@@ -55,11 +59,13 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(Long scheduleId) {
-        boolean existence = scheduleRepository.existsById(scheduleId);
+    public void deleteSchedule(Long userId, Long scheduleId) {
+        Schedule findedSchedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(()-> new IllegalStateException("존재하지 않는 일정입니다."));
 
-        if (existence) {
-            scheduleRepository.deleteById(scheduleId);
+        if(!findedSchedule.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("작성자가 적은 글이 아닙니다.");
         }
+            scheduleRepository.deleteById(scheduleId);
     }
 }

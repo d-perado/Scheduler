@@ -39,18 +39,17 @@ public class ScheduleController {
             @RequestBody UpdateScheduleRequest request,
             @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
     ) {
-
-
-        UpdateScheduleResponse result = scheduleService.updateSchedule(scheduleId,request);
+        UpdateScheduleResponse result = scheduleService.updateSchedule(sessionUser.getId(), scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> handleDeleteSchedule(
-            @PathVariable Long scheduleId
+            @PathVariable Long scheduleId,
+            @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
     ) {
-        scheduleService.deleteSchedule(scheduleId);
+        scheduleService.deleteSchedule(sessionUser.getId(), scheduleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
