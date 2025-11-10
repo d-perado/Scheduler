@@ -15,7 +15,7 @@ public class User extends TimeBaseEntity {
     private Long id;
 
     @Getter
-    @Column
+    @Column(length = 4, nullable = false)
     private String name;
 
     @Getter
@@ -24,7 +24,7 @@ public class User extends TimeBaseEntity {
     private String email;
 
     @Getter
-    @Column
+    @Column(nullable = false)
     private String password;
 
     public User(String name, String email, String password) {
@@ -39,7 +39,4 @@ public class User extends TimeBaseEntity {
         this.password = password;
     }
 
-    public boolean isEmpty(){
-        return this.email.isEmpty();
-    }
 }

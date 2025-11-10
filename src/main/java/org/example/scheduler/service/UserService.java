@@ -47,7 +47,7 @@ public class UserService {
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다."));
 
-        findedUser.modify(request.getName(), request.getEmail());
+        findedUser.modify(request.getName(), request.getPassword());
 
         UserDTO userDTO = new UserDTO(findedUser);
 

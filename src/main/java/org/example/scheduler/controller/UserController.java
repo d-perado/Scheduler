@@ -1,11 +1,14 @@
 package org.example.scheduler.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.login.LoginRequest;
 import org.example.scheduler.dto.login.LoginResponse;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.service.UserService;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<CreateUserResponse> handlerCreateUser(
-            @RequestBody CreateUserRequest request
+           @Valid @RequestBody CreateUserRequest request
     ) {
 
         CreateUserResponse result = userService.createUser(request);
@@ -29,8 +32,8 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(
             @RequestBody LoginRequest request,
             HttpSession session){
-
         try {
+
             SessionUserDTO sessionUserDTO = userService.login(request);
 
             session.setAttribute("loginUser",sessionUserDTO);
@@ -63,7 +66,7 @@ public class UserController {
             ) {
 
         if(!sessionUser.getId().equals(userId)) {
-            throw new IllegalArgumentException("로그인 인가가 되지 않았습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
 
         UpdateUserResponse result = userService.updateUser(userId,request);

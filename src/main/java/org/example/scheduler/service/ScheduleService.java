@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.ScheduleValidator;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,7 @@ public class ScheduleService {
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request,Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
-                ()-> new IllegalStateException("존재하지 않는 유저입니다."));
-
-
+                ()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
 
@@ -47,8 +47,8 @@ public class ScheduleService {
 
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        if(!findedSchedule.getId().equals(userId)){
-            throw new IllegalArgumentException("작성자 본인이 아닙니다.");
+        if(!findedSchedule.getUser().getId().equals(userId)){
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
 
         findedSchedule.modify(request.getTitle(), request.getContent());
@@ -60,11 +60,10 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
-        Schedule findedSchedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(()-> new IllegalStateException("존재하지 않는 일정입니다."));
+        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
         if(!findedSchedule.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("작성자가 적은 글이 아닙니다.");
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
             scheduleRepository.deleteById(scheduleId);
     }

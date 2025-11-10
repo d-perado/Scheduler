@@ -14,7 +14,7 @@ public class Schedule extends TimeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String title;
 
     @Column
