@@ -18,9 +18,11 @@ public class ScheduleService {
     private final ScheduleValidator scheduleValidator;
 
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
-        User findedUser = userRepository.findById(request.getUserId()).orElseThrow(
+    public CreateScheduleResponse createSchedule(CreateScheduleRequest request,Long userId) {
+        User findedUser = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalStateException("존재하지 않는 유저입니다."));
+
+
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
 

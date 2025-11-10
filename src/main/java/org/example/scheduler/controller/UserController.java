@@ -19,6 +19,7 @@ public class UserController {
     public ResponseEntity<CreateUserResponse> handlerCreateUser(
             @RequestBody CreateUserRequest request
     ) {
+
         CreateUserResponse result = userService.createUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
@@ -57,8 +58,14 @@ public class UserController {
     @PatchMapping("/users/{userId}")
     public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
             @PathVariable Long userId,
-            @RequestBody UpdateUserRequest request
+            @RequestBody UpdateUserRequest request,
+            @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
             ) {
+
+        if(!sessionUser.getId().equals(userId)) {
+            throw new IllegalArgumentException("로그인 인가가 되지 않았습니다.");
+        }
+
         UpdateUserResponse result = userService.updateUser(userId,request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

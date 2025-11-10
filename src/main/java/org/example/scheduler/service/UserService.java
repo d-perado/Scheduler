@@ -76,4 +76,10 @@ public class UserService {
 
         return new SessionUserDTO(findedUser.getId(), findedUser.getEmail());
     }
+
+    @Transactional(readOnly = true)
+    public boolean validCommonUser(Long id) {
+        return userRepository.existsById(id);
+    }
+
 }
