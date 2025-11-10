@@ -6,12 +6,14 @@ import org.example.scheduler.dto.user.*;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
         boolean existence = userRepository.existsByEmail(request.getEmail());
 
@@ -30,6 +32,7 @@ public class UserService {
         return new CreateUserResponse(savedUserDTO);
     }
 
+    @Transactional(readOnly = true)
     public GetUserResponse getUserById(Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다."));
@@ -39,6 +42,7 @@ public class UserService {
         return new GetUserResponse(userDTO);
     }
 
+    @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다."));
@@ -50,6 +54,7 @@ public class UserService {
         return new UpdateUserResponse(userDTO);
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
         boolean existence = userRepository.existsById(userId);
 
@@ -60,6 +65,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @Transactional(readOnly = true)
     public SessionUserDTO login(LoginRequest request){
         User findedUser = userRepository.findUserByEmail(request.getEmail()).orElseThrow(
                 ()-> new IllegalStateException("가입되지 않은 이메일입니다."));
