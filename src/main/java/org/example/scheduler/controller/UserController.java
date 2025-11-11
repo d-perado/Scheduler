@@ -33,6 +33,9 @@ public class UserController {
             @RequestBody LoginRequest request,
             HttpSession session
     ) {
+        if(session.getAttribute("loginUser")!=null){
+            throw new CustomException(ErrorCode.ALREADY_LOGGED_IN);
+        }
         try {
 
             SessionUserDTO sessionUserDTO = userService.login(request);

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "comments")
 @NoArgsConstructor
 public class Comment extends TimeBaseEntity {
     @Id
