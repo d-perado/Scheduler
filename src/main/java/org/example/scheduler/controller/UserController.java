@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
+    public ResponseEntity<LoginResponse> handlerLogin(
             @RequestBody LoginRequest request,
             HttpSession session){
         try {
@@ -75,9 +75,9 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(
+    public ResponseEntity<Void> handlerLogout(
             @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser,HttpSession session) {
-        if(sessionUser==null) {
+        if(sessionUser == null) {
             return ResponseEntity.badRequest().build();
         }
         session.invalidate();

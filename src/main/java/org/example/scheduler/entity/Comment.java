@@ -2,8 +2,11 @@ package org.example.scheduler.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Entity
+@NoArgsConstructor
 public class Comment extends TimeBaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

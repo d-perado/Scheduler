@@ -15,7 +15,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/schedules")
-    public ResponseEntity<CreateScheduleResponse> handleCreateSchedule(
+    public ResponseEntity<CreateScheduleResponse> handlerCreateSchedule(
             @Valid @RequestBody CreateScheduleRequest request,
             @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
     ) {
@@ -24,7 +24,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules/{scheduleId}")
-    public ResponseEntity<GetScheduleResponse> handleGetSchedule(
+    public ResponseEntity<GetScheduleResponse> handlerGetSchedule(
             @PathVariable Long scheduleId
     ) {
         GetScheduleResponse result = scheduleService.getSchedule(scheduleId);
@@ -32,7 +32,7 @@ public class ScheduleController {
     }
 
     @PatchMapping("/schedules/{scheduleId}")
-    public ResponseEntity<UpdateScheduleResponse> handleUpdateSchedule(
+    public ResponseEntity<UpdateScheduleResponse> handlerUpdateSchedule(
             @PathVariable Long scheduleId,
             @Valid @RequestBody UpdateScheduleRequest request,
             @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
@@ -43,7 +43,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseEntity<Void> handleDeleteSchedule(
+    public ResponseEntity<Void> handlerDeleteSchedule(
             @PathVariable Long scheduleId,
             @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
     ) {

@@ -32,6 +32,8 @@ public class CommentService {
 
         Comment comment = new Comment(request.getContent(), currentUser,currentSchedule);
 
+        commentRepository.save(comment);
+
         CommentDTO commentDTO = new CommentDTO(comment);
 
         return new CreateCommentResponse(commentDTO);
