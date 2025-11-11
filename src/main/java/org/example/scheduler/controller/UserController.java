@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<CreateUserResponse> handlerCreateUser(
-           @Valid @RequestBody CreateUserRequest request
+            @Valid @RequestBody CreateUserRequest request
     ) {
 
         CreateUserResponse result = userService.createUser(request);
@@ -31,12 +31,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> handlerLogin(
             @RequestBody LoginRequest request,
-            HttpSession session){
+            HttpSession session
+    ) {
         try {
 
             SessionUserDTO sessionUserDTO = userService.login(request);
 
-            session.setAttribute("loginUser",sessionUserDTO);
+            session.setAttribute("loginUser", sessionUserDTO);
 
             LoginResponse result = new LoginResponse(sessionUserDTO);
 
@@ -62,22 +63,22 @@ public class UserController {
     public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
             @PathVariable Long userId,
             @RequestBody UpdateUserRequest request,
-            @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser
-            ) {
+            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
+    ) {
 
-        if(!sessionUser.getId().equals(userId)) {
+        if (!sessionUser.getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
 
-        UpdateUserResponse result = userService.updateUser(userId,request);
+        UpdateUserResponse result = userService.updateUser(userId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> handlerLogout(
-            @SessionAttribute(name = "loginUser",required = false) SessionUserDTO sessionUser,HttpSession session) {
-        if(sessionUser == null) {
+            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser, HttpSession session) {
+        if (sessionUser == null) {
             return ResponseEntity.badRequest().build();
         }
         session.invalidate();

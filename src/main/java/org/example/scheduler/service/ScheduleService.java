@@ -20,9 +20,9 @@ public class ScheduleService {
     private final ScheduleValidator scheduleValidator;
 
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request,Long userId) {
+    public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
-                ()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
 
@@ -47,7 +47,7 @@ public class ScheduleService {
 
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        if(!findedSchedule.getUser().getId().equals(userId)){
+        if (!findedSchedule.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
 
@@ -62,9 +62,9 @@ public class ScheduleService {
     public void deleteSchedule(Long userId, Long scheduleId) {
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        if(!findedSchedule.getUser().getId().equals(userId)) {
+        if (!findedSchedule.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
-            scheduleRepository.deleteById(scheduleId);
+        scheduleRepository.deleteById(scheduleId);
     }
 }

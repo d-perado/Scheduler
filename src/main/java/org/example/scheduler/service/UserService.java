@@ -69,11 +69,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public SessionUserDTO login(LoginRequest request){
+    public SessionUserDTO login(LoginRequest request) {
         User findedUser = userRepository.findUserByEmail(request.getEmail()).orElseThrow(
-                ()-> new IllegalStateException("가입되지 않은 이메일입니다."));
+                () -> new IllegalStateException("가입되지 않은 이메일입니다."));
 
-        if(!passwordEncoder.matches(request.getPassword(),findedUser.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), findedUser.getPassword())) {
             throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
         }
 

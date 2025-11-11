@@ -8,8 +8,8 @@ public class LoginResponse {
     private final Long id;
     private final String email;
 
-    public LoginResponse(SessionUserDTO sessionUserDTO){
-        this.id = sessionUserDTO.getId();;
-        this.email = sessionUserDTO.getEmail();;
+    public LoginResponse(SessionUserDTO sessionUserDTO) {
+        this.id = sessionUserDTO.getId();
+        this.email = sessionUserDTO.getEmail();
     }
 }

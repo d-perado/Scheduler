@@ -7,7 +7,7 @@ public class SessionUserDTO {
     private final Long id;
     private final String email;
 
-    public SessionUserDTO(Long userId, String userEmail){
+    public SessionUserDTO(Long userId, String userEmail) {
         this.id = userId;
         this.email = userEmail;
     }

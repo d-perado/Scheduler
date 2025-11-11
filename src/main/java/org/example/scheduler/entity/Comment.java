@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Comment extends TimeBaseEntity{
+public class Comment extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,7 @@ public class Comment extends TimeBaseEntity{
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    public Comment(String contents, User user, Schedule schedule){
+    public Comment(String contents, User user, Schedule schedule) {
         this.content = contents;
         this.user = user;
         this.schedule = schedule;

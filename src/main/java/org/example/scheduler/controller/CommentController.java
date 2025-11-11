@@ -19,7 +19,7 @@ public class CommentController {
             @PathVariable Long scheduleId,
             @RequestBody CreateCommentRequest request,
             @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUserDTO
-            ) {
+    ) {
 
         CreateCommentResponse result = commentService.create(sessionUserDTO, scheduleId, request);
 

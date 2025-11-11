@@ -16,7 +16,7 @@ public class CommentDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public CommentDTO(Comment comment){
+    public CommentDTO(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.user = comment.getUser();

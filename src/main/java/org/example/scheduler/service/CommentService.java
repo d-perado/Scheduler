@@ -30,7 +30,7 @@ public class CommentService {
         Schedule currentSchedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-        Comment comment = new Comment(request.getContent(), currentUser,currentSchedule);
+        Comment comment = new Comment(request.getContent(), currentUser, currentSchedule);
 
         commentRepository.save(comment);
 
