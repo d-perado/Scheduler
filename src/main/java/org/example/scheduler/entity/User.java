@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.scheduler.dto.user.SessionUserDTO;
 
 @Entity
 @Table(name = "users")

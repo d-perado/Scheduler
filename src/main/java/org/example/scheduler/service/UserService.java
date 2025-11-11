@@ -1,6 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.config.PasswordEncoder;
 import org.example.scheduler.dto.login.LoginRequest;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
@@ -21,9 +23,10 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
 
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getName(),
                 request.getEmail(),
-                request.getPassword());
+                encodedPassword);
 
         User savedUser = userRepository.save(user);
 
@@ -70,7 +73,7 @@ public class UserService {
         User findedUser = userRepository.findUserByEmail(request.getEmail()).orElseThrow(
                 ()-> new IllegalStateException("가입되지 않은 이메일입니다."));
 
-        if(!findedUser.getPassword().equals(request.getPassword())) {
+        if(!passwordEncoder.matches(request.getPassword(),findedUser.getPassword())) {
             throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
         }
 
