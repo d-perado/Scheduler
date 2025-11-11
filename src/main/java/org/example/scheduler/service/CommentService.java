@@ -1,13 +1,10 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scheduler.dto.comment.CommentDTO;
-import org.example.scheduler.dto.comment.CreateCommentRequest;
-import org.example.scheduler.dto.comment.CreateCommentResponse;
-import org.example.scheduler.dto.comment.GetCommentResponse;
-import org.example.scheduler.dto.schedule.GetScheduleResponse;
-import org.example.scheduler.dto.schedule.ScheduleDTO;
+import org.example.scheduler.dto.comment.*;
 import org.example.scheduler.dto.user.SessionUserDTO;
+import org.example.scheduler.dto.user.UpdateUserRequest;
+import org.example.scheduler.dto.user.UpdateUserResponse;
 import org.example.scheduler.entity.Comment;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.entity.User;
@@ -47,11 +44,34 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetCommentResponse> getComments(Long scheduleId){
+    public List<GetCommentResponse> getComments(Long scheduleId) {
        List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
 
         return foundComments.stream()
                 .map((x)->new GetCommentResponse(new CommentDTO(x)))
                 .toList();
+    }
+
+    @Transactional
+    public UpdateCommentResponse modifyContent(UpdateCommentRequest request) {
+        Comment comment = commentRepository.findById(request.getId()).orElseThrow(
+                ()-> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        comment.modify(request.getContent());
+
+        CommentDTO commentDTO = new CommentDTO(comment);
+
+        return new UpdateCommentResponse(commentDTO);
+    }
+
+    @Transactional
+    public void delete(Long commentId) {
+        boolean existence = commentRepository.existsById(commentId);
+
+        if (!existence) {
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+
+        commentRepository.deleteById(commentId);
     }
 }
