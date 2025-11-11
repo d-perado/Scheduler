@@ -33,7 +33,7 @@ public class UserController {
             @RequestBody LoginRequest request,
             HttpSession session
     ) {
-        if(session.getAttribute("loginUser")!=null){
+        if (session.getAttribute("loginUser") != null) {
             throw new CustomException(ErrorCode.ALREADY_LOGGED_IN);
         }
         try {

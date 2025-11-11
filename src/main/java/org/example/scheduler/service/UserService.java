@@ -5,6 +5,7 @@ import org.example.scheduler.config.PasswordEncoder;
 import org.example.scheduler.dto.login.LoginRequest;
 import org.example.scheduler.dto.user.*;
 import org.example.scheduler.entity.User;
+import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ScheduleRepository scheduleRepository;
 
     @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
@@ -64,6 +66,8 @@ public class UserService {
         if (!existence) {
             throw new IllegalStateException("존재하지 않는 유저입니다.");
         }
+
+        scheduleRepository.deleteAllByUser_Id(userId);
 
         userRepository.deleteById(userId);
     }

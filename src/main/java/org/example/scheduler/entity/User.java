@@ -5,25 +5,22 @@ import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
 public class User extends TimeBaseEntity {
     @Id
-    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
     @Column(length = 4, nullable = false)
     private String name;
 
-    @Getter
     @Column(unique = true)
     @Email
     private String email;
 
-    @Getter
     @Column(nullable = false)
     private String password;
 
