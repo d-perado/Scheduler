@@ -14,6 +14,7 @@ import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
 
 
+    @Transactional
     public CreateCommentResponse create(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
         User currentUser = userRepository.findById(sessionUserDTO.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
