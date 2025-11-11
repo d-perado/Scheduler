@@ -1,4 +1,4 @@
-package org.example.scheduler.dto.content;
+package org.example.scheduler.dto.comment;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
