@@ -3,8 +3,6 @@ package org.example.scheduler.service;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
 import org.example.scheduler.dto.user.SessionUserDTO;
-import org.example.scheduler.dto.user.UpdateUserRequest;
-import org.example.scheduler.dto.user.UpdateUserResponse;
 import org.example.scheduler.entity.Comment;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.entity.User;
@@ -13,6 +11,8 @@ import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,17 +45,17 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<GetCommentResponse> getComments(Long scheduleId) {
-       List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
+        List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
 
         return foundComments.stream()
-                .map((x)->new GetCommentResponse(new CommentDTO(x)))
+                .map((x) -> new GetCommentResponse(new CommentDTO(x)))
                 .toList();
     }
 
     @Transactional
     public UpdateCommentResponse modifyContent(UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(request.getId()).orElseThrow(
-                ()-> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         comment.modify(request.getContent());
 
@@ -73,5 +73,12 @@ public class CommentService {
         }
 
         commentRepository.deleteById(commentId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentDTO> getPagedComment(Long scheduleId, int pageNo) {
+        Page<Comment> pagedComments = commentRepository.findCommentsBySchedule_Id(scheduleId, Pageable.ofSize(10).withPage(pageNo));
+
+        return pagedComments.map(CommentDTO::new);
     }
 }

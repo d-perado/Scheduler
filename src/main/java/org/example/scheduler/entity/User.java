@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.scheduler.config.PasswordEncoder;
 
 @Getter
 @Entity
@@ -24,11 +25,11 @@ public class User extends TimeBaseEntity {
     @Column(nullable = false)
     private String password;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, PasswordEncoder passwordEncoder) {
         super();
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 
     public void modify(String name, String password) {
@@ -36,4 +37,7 @@ public class User extends TimeBaseEntity {
         this.password = password;
     }
 
+    public boolean isValid(String password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password,this.password);
+    }
 }

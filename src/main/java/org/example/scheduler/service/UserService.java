@@ -25,10 +25,10 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getName(),
                 request.getEmail(),
-                encodedPassword);
+                request.getPassword(),
+                passwordEncoder);
 
         User savedUser = userRepository.save(user);
 
@@ -77,16 +77,11 @@ public class UserService {
         User findedUser = userRepository.findUserByEmail(request.getEmail()).orElseThrow(
                 () -> new IllegalStateException("가입되지 않은 이메일입니다."));
 
-        if (!passwordEncoder.matches(request.getPassword(), findedUser.getPassword())) {
+        if (!findedUser.isValid(request.getPassword(), passwordEncoder)) {
             throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
         }
 
         return new SessionUserDTO(findedUser.getId(), findedUser.getEmail());
-    }
-
-    @Transactional(readOnly = true)
-    public boolean validCommonUser(Long id) {
-        return userRepository.existsById(id);
     }
 
 }

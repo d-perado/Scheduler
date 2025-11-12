@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
 import org.example.scheduler.dto.user.SessionUserDTO;
 import org.example.scheduler.service.CommentService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +51,16 @@ public class CommentController {
     ) {
         commentService.delete(commentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/comments/{scheduleId}")
+    public ResponseEntity<Page<CommentDTO>> handlerGetComments(
+            @PathVariable Long scheduleId,
+            @RequestParam int pageNo
+    ) {
+        Page<CommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

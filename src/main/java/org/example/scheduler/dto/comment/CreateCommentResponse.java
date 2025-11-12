@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CreateCommentResponse {
     private final Long id;
     private final String content;
-    private final Long userId;
+    private final String userName;
     private final Long scheduleId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
@@ -18,8 +18,8 @@ public class CreateCommentResponse {
     public CreateCommentResponse(CommentDTO commentDTO) {
         this.id = commentDTO.getId();
         this.content = commentDTO.getContent();
-        this.userId = commentDTO.getUser().getId();
-        this.scheduleId = commentDTO.getSchedule().getId();
+        this.userName = commentDTO.getUserName();
+        this.scheduleId = commentDTO.getScheduleId();
         this.createdAt = commentDTO.getCreatedAt();
         this.updatedAt = commentDTO.getUpdatedAt();
     }
