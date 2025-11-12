@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.example.scheduler.dto.schedule.*;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.user.SessionUserDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,13 @@ public class ScheduleController {
     ) {
         scheduleService.deleteSchedule(sessionUser.getId(), scheduleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/schedules/all")
+    public ResponseEntity<Page<GetPagedScheduleResponse>> handlerGetPagedSchedule(
+            @RequestParam int pageNo
+    ) {
+        Page<GetPagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

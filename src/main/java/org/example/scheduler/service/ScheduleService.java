@@ -8,9 +8,13 @@ import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.ScheduleValidator;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +70,15 @@ public class ScheduleService {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
         scheduleRepository.deleteById(scheduleId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<GetPagedScheduleResponse> getPagedSchedule(int pageNo) {
+        Page<Schedule> pagedSchedules = scheduleRepository.findAll(Pageable.ofSize(10).withPage(pageNo));
+
+        Page<ScheduleDTO> pagedScheduleDTOS = pagedSchedules.map(ScheduleDTO::new);
+
+        return pagedScheduleDTOS.map(GetPagedScheduleResponse::new);
+
     }
 }
