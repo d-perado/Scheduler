@@ -71,6 +71,7 @@ public class ScheduleService {
         if (!findedSchedule.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
+
         commentRepository.deleteAllBySchedule_Id(scheduleId);
         scheduleRepository.deleteById(scheduleId);
     }

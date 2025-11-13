@@ -22,5 +22,4 @@ public class AuthFilter implements Filter {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
     }
-
 }

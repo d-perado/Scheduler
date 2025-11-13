@@ -18,17 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final UserService userService;
 
-    @PostMapping("/api/private/logout")
-    public ResponseEntity<Void> handlerLogout(
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser, HttpSession session) {
-        if (sessionUser == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        session.invalidate();
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> handlerLogin(
             @RequestBody LoginRequest request,
@@ -37,19 +26,16 @@ public class AuthController {
         if (session.getAttribute("loginUser") != null) {
             throw new CustomException(ErrorCode.ALREADY_LOGGED_IN);
         }
-        try {
-
             SessionUserDTO sessionUserDTO = userService.login(request);
 
             session.setAttribute("loginUser", sessionUserDTO);
 
-            LoginResponse result = new LoginResponse(sessionUserDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
+    @PostMapping("/api/private/logout")
+    public ResponseEntity<Void> handlerLogout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

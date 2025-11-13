@@ -1,7 +1,9 @@
 package org.example.scheduler.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
+import org.example.scheduler.dto.schedule.ScheduleDTO;
 import org.example.scheduler.dto.user.SessionUserDTO;
 import org.example.scheduler.service.CommentService;
 import org.springframework.data.domain.Page;
@@ -20,10 +22,9 @@ public class CommentController {
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId,
             @RequestBody CreateCommentRequest request,
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUserDTO
+            HttpSession session
     ) {
-
-        CreateCommentResponse result = commentService.create(sessionUserDTO, scheduleId, request);
+        CreateCommentResponse result = commentService.create((SessionUserDTO) session.getAttribute("loginUser"), scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
