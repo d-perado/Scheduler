@@ -10,14 +10,17 @@ public class GetPagedScheduleResponse {
     private final String title;
     private final String content;
     private final String writer;
+    private final int commentCount;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public GetPagedScheduleResponse(ScheduleDTO scheduleDTO) {
+
+    public GetPagedScheduleResponse(ScheduleDTO scheduleDTO, int commentCount) {
         this.id = scheduleDTO.getId();
         this.title = scheduleDTO.getTitle();
         this.content = scheduleDTO.getContent();
         this.writer = scheduleDTO.getWriter();
+        this.commentCount = commentCount;
         this.createdAt = scheduleDTO.getCreatedAt();
         this.updatedAt = scheduleDTO.getUpdatedAt();
     }

@@ -2,13 +2,17 @@ package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.config.PasswordEncoder;
-import org.example.scheduler.dto.login.LoginRequest;
+import org.example.scheduler.dto.auth.LoginRequest;
 import org.example.scheduler.dto.user.*;
+import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.entity.User;
+import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
@@ -67,7 +72,11 @@ public class UserService {
         if (!existence) {
             throw new IllegalStateException("존재하지 않는 유저입니다.");
         }
+        List<Schedule> foundSchedule = scheduleRepository.findSchedulesByUser_Id(userId);
 
+        for (Schedule schedule:foundSchedule) {
+            commentRepository.deleteAllBySchedule_Id(schedule.getId());
+        }
         scheduleRepository.deleteAllByUser_Id(userId);
 
         userRepository.deleteById(userId);

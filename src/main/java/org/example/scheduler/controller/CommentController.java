@@ -16,7 +16,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/schedules/{scheduleId}/comments")
+    @PostMapping("/api/private/schedules/{scheduleId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId,
             @RequestBody CreateCommentRequest request,
@@ -37,7 +37,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/comments")
+    @PatchMapping("/api/private/comments")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @RequestBody UpdateCommentRequest request
             ) {
@@ -45,7 +45,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/api/private/{commentId}")
     public ResponseEntity<Void> handlerDelete(
             @PathVariable Long commentId
     ) {

@@ -1,4 +1,4 @@
-package org.example.scheduler.dto.login;
+package org.example.scheduler.dto.auth;
 
 import lombok.Getter;
 import org.example.scheduler.dto.user.SessionUserDTO;

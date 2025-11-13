@@ -15,7 +15,7 @@ import org.example.scheduler.service.ScheduleService;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
-    @PostMapping("/schedules")
+    @PostMapping("/api/private/schedules")
     public ResponseEntity<CreateScheduleResponse> handlerCreateSchedule(
             @Valid @RequestBody CreateScheduleRequest request,
             @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
@@ -32,7 +32,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/schedules/{scheduleId}")
+    @PatchMapping("/api/private/schedules/{scheduleId}")
     public ResponseEntity<UpdateScheduleResponse> handlerUpdateSchedule(
             @PathVariable Long scheduleId,
             @Valid @RequestBody UpdateScheduleRequest request,
@@ -43,7 +43,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("/schedules/{scheduleId}")
+    @DeleteMapping("/api/private/schedules/{scheduleId}")
     public ResponseEntity<Void> handlerDeleteSchedule(
             @PathVariable Long scheduleId,
             @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser

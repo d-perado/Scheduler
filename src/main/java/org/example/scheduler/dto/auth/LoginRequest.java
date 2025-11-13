@@ -1,4 +1,4 @@
-package org.example.scheduler.dto.login;
+package org.example.scheduler.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
