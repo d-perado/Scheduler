@@ -9,6 +9,8 @@ import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.repository.UserRepository;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetUserResponse getUserById(Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다."));
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         UserDTO userDTO = new UserDTO(findedUser);
 
@@ -56,7 +58,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다."));
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         findedUser.modify(request.getName(), request.getPassword());
 
@@ -70,7 +72,7 @@ public class UserService {
         boolean existence = userRepository.existsById(userId);
 
         if (!existence) {
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         List<Schedule> foundSchedule = scheduleRepository.findSchedulesByUser_Id(userId);
 
@@ -85,10 +87,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public SessionUserDTO login(LoginRequest request) {
         User findedUser = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalStateException("가입되지 않은 이메일입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (!findedUser.isValid(request.getPassword(), passwordEncoder)) {
-            throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
         return new SessionUserDTO(findedUser.getId(), findedUser.getEmail());

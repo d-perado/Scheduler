@@ -61,7 +61,6 @@ public class CommentController {
     ) {
         Page<CommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
 
-
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
