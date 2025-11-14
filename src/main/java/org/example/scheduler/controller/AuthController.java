@@ -14,13 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> handlerLogin(
+    public ResponseEntity<Void> handlerLogin(
             @Valid @RequestBody LoginRequest request,
             HttpSession session
     ) {
