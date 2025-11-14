@@ -1,6 +1,7 @@
 package org.example.scheduler.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.auth.LoginRequest;
 import org.example.scheduler.dto.auth.LoginResponse;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> handlerLogin(
-            @RequestBody LoginRequest request,
+            @Valid @RequestBody LoginRequest request,
             HttpSession session
     ) {
         if (session.getAttribute("loginUser") != null) {

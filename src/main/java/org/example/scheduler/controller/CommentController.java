@@ -1,6 +1,7 @@
 package org.example.scheduler.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
 import org.example.scheduler.dto.user.SessionUserDTO;
@@ -20,7 +21,7 @@ public class CommentController {
     @PostMapping("/api/private/schedules/{scheduleId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId,
-            @RequestBody CreateCommentRequest request,
+            @Valid @RequestBody CreateCommentRequest request,
             HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO)session.getAttribute("loginUser");
@@ -41,7 +42,7 @@ public class CommentController {
 
     @PatchMapping("/api/private/comments")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
-            @RequestBody UpdateCommentRequest request
+            @Valid @RequestBody UpdateCommentRequest request
             ) {
         UpdateCommentResponse result = commentService.modifyContent(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
