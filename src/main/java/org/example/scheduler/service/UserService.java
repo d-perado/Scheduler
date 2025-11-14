@@ -39,9 +39,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        UserDTO savedUserDTO = new UserDTO(savedUser);
-
-        return new CreateUserResponse(savedUserDTO);
+        return new CreateUserResponse(savedUser);
     }
 
     @Transactional(readOnly = true)
@@ -49,9 +47,7 @@ public class UserService {
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        UserDTO userDTO = new UserDTO(findedUser);
-
-        return new GetUserResponse(userDTO);
+        return new GetUserResponse(findedUser);
 
     }
 
@@ -62,9 +58,7 @@ public class UserService {
 
         findedUser.modify(request.getName(), request.getPassword());
 
-        UserDTO userDTO = new UserDTO(findedUser);
-
-        return new UpdateUserResponse(userDTO);
+        return new UpdateUserResponse(findedUser);
     }
 
     @Transactional

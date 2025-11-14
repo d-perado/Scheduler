@@ -6,7 +6,7 @@ import org.example.scheduler.entity.Comment;
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentDTO {
+public class PagedCommentDTO {
     private final Long id;
     private final String content;
     private final String userName;
@@ -14,7 +14,7 @@ public class CommentDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public CommentDTO(Comment comment) {
+    public PagedCommentDTO(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.userName = comment.getUser().getName();

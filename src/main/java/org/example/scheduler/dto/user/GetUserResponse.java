@@ -1,6 +1,7 @@
 package org.example.scheduler.dto.user;
 
 import lombok.Getter;
+import org.example.scheduler.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +13,11 @@ public class GetUserResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public GetUserResponse(UserDTO userDTO) {
-        this.id = userDTO.getId();
-        this.name = userDTO.getName();
-        this.email = userDTO.getEmail();
-        this.createdAt = userDTO.getCreatedAt();
-        this.updatedAt = userDTO.getUpdatedAt();
+    public GetUserResponse(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }

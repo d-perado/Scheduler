@@ -36,11 +36,9 @@ public class CommentService {
 
         Comment comment = new Comment(request.getContent(), currentUser, currentSchedule);
 
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
 
-        CommentDTO commentDTO = new CommentDTO(comment);
-
-        return new CreateCommentResponse(commentDTO);
+        return new CreateCommentResponse(savedComment);
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +46,7 @@ public class CommentService {
         List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
 
         return foundComments.stream()
-                .map((x) -> new GetCommentResponse(new CommentDTO(x)))
+                .map(GetCommentResponse::new)
                 .toList();
     }
 
@@ -59,9 +57,7 @@ public class CommentService {
 
         comment.modify(request.getContent());
 
-        CommentDTO commentDTO = new CommentDTO(comment);
-
-        return new UpdateCommentResponse(commentDTO);
+        return new UpdateCommentResponse(comment);
     }
 
     @Transactional
@@ -76,9 +72,9 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentDTO> getPagedComment(Long scheduleId, int pageNo) {
+    public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {
         Page<Comment> pagedComments = commentRepository.findCommentsBySchedule_Id(scheduleId, Pageable.ofSize(10).withPage(pageNo));
 
-        return pagedComments.map(CommentDTO::new);
+        return pagedComments.map(PagedCommentDTO::new);
     }
 }

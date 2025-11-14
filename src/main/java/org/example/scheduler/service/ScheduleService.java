@@ -34,18 +34,14 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        ScheduleDTO savedScheduleDTO = new ScheduleDTO(savedSchedule);
-
-        return new CreateScheduleResponse(savedScheduleDTO);
+        return new CreateScheduleResponse(savedSchedule);
     }
 
     @Transactional(readOnly = true)
     public GetScheduleResponse getSchedule(Long scheduleId) {
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        ScheduleDTO findedScheduleDTO = new ScheduleDTO(findedSchedule);
-
-        return new GetScheduleResponse(findedScheduleDTO);
+        return new GetScheduleResponse(findedSchedule);
     }
 
     @Transactional
@@ -59,9 +55,7 @@ public class ScheduleService {
 
         findedSchedule.modify(request.getTitle(), request.getContent());
 
-        ScheduleDTO modifiedScheduleDTO = new ScheduleDTO(findedSchedule);
-
-        return new UpdateScheduleResponse(modifiedScheduleDTO);
+        return new UpdateScheduleResponse(findedSchedule);
     }
 
     @Transactional
@@ -80,9 +74,7 @@ public class ScheduleService {
     public Page<GetPagedScheduleResponse> getPagedSchedule(int pageNo) {
         Page<Schedule> pagedSchedules = scheduleRepository.findAll(PageRequest.of(pageNo,10,Sort.by(Sort.Direction.DESC,"updatedAt")));
 
-        Page<ScheduleDTO> pagedScheduleDTOS = pagedSchedules.map(ScheduleDTO::new);
-
-        return pagedScheduleDTOS.map(x->new GetPagedScheduleResponse(x,commentRepository.countCommentsBySchedule_Id(x.getId())));
+        return pagedSchedules.map(x->new GetPagedScheduleResponse(x,commentRepository.countCommentsBySchedule_Id(x.getId())));
 
     }
 }

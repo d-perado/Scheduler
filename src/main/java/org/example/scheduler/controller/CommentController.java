@@ -3,7 +3,6 @@ package org.example.scheduler.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
-import org.example.scheduler.dto.schedule.ScheduleDTO;
 import org.example.scheduler.dto.user.SessionUserDTO;
 import org.example.scheduler.service.CommentService;
 import org.springframework.data.domain.Page;
@@ -55,11 +54,11 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{scheduleId}")
-    public ResponseEntity<Page<CommentDTO>> handlerGetComments(
+    public ResponseEntity<Page<PagedCommentDTO>> handlerGetComments(
             @PathVariable Long scheduleId,
             @RequestParam int pageNo
     ) {
-        Page<CommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
+        Page<PagedCommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
