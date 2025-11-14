@@ -11,7 +11,7 @@ public class FilterConfig {
     public FilterRegistrationBean<AuthFilter> authFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/api/private/*");
+        registrationBean.addUrlPatterns("/api/*");
         registrationBean.setOrder(1);
 
         return registrationBean;

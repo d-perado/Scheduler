@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+
     private final UserService userService;
 
     @PostMapping("/login")
@@ -34,7 +35,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/api/private/logout")
+    @PostMapping("/api/logout")
     public ResponseEntity<Void> handlerLogout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

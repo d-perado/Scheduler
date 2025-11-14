@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.comment.*;
 import org.example.scheduler.dto.user.SessionUserDTO;
 import org.example.scheduler.service.CommentService;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +20,17 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/api/private/schedules/{scheduleId}/comments")
+    @PostMapping("/api/schedules/{scheduleId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId,
             @Valid @RequestBody CreateCommentRequest request,
             HttpSession session
     ) {
-        SessionUserDTO sessionUserDTO = (SessionUserDTO)session.getAttribute("loginUser");
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
+        if (sessionUserDTO == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
 
         CreateCommentResponse result = commentService.create(sessionUserDTO, scheduleId, request);
 
@@ -40,15 +46,15 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/api/private/comments")
+    @PatchMapping("/apiW/comments")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @Valid @RequestBody UpdateCommentRequest request
-            ) {
+    ) {
         UpdateCommentResponse result = commentService.modifyContent(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("/api/private/{commentId}")
+    @DeleteMapping("/api/{commentId}")
     public ResponseEntity<Void> handlerDelete(
             @PathVariable Long commentId
     ) {

@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/api/private/users/{userId}")
+    @PatchMapping("/api/users/{userId}")
     public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserRequest request,

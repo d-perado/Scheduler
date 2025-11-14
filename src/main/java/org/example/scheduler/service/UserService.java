@@ -29,7 +29,7 @@ public class UserService {
         boolean existence = userRepository.existsByEmail(request.getEmail());
 
         if (existence) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new CustomException(ErrorCode.ALREADY_EXIST_IN);
         }
 
         User user = new User(request.getName(),
