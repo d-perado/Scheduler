@@ -61,7 +61,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long commentId) {
+    public void deleteComment(Long commentId) {
         boolean existence = commentRepository.existsById(commentId);
 
         if (!existence) {

@@ -1,5 +1,6 @@
 package org.example.scheduler.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.user.*;
@@ -39,10 +40,10 @@ public class UserController {
     public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
             @PathVariable Long userId,
             @RequestBody UpdateUserRequest request,
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
+            HttpSession session
     ) {
-
-        if (!sessionUser.getId().equals(userId)) {
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+        if (!sessionUserDTO.getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
 

@@ -1,5 +1,6 @@
 package org.example.scheduler.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.example.scheduler.dto.schedule.*;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,12 @@ public class ScheduleController {
     @PostMapping("/api/private/schedules")
     public ResponseEntity<CreateScheduleResponse> handlerCreateSchedule(
             @Valid @RequestBody CreateScheduleRequest request,
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
+            HttpSession session
     ) {
-        CreateScheduleResponse result = scheduleService.createSchedule(request, sessionUser.getId());
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
+        CreateScheduleResponse result = scheduleService.createSchedule(request, sessionUserDTO.getId());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -36,9 +40,11 @@ public class ScheduleController {
     public ResponseEntity<UpdateScheduleResponse> handlerUpdateSchedule(
             @PathVariable Long scheduleId,
             @Valid @RequestBody UpdateScheduleRequest request,
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
+            HttpSession session
     ) {
-        UpdateScheduleResponse result = scheduleService.updateSchedule(sessionUser.getId(), scheduleId, request);
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
+        UpdateScheduleResponse result = scheduleService.updateSchedule(sessionUserDTO.getId(), scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -46,9 +52,12 @@ public class ScheduleController {
     @DeleteMapping("/api/private/schedules/{scheduleId}")
     public ResponseEntity<Void> handlerDeleteSchedule(
             @PathVariable Long scheduleId,
-            @SessionAttribute(name = "loginUser", required = false) SessionUserDTO sessionUser
+            HttpSession session
     ) {
-        scheduleService.deleteSchedule(sessionUser.getId(), scheduleId);
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
+        scheduleService.deleteSchedule(sessionUserDTO.getId(), scheduleId);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

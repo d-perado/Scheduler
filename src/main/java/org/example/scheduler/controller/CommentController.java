@@ -23,7 +23,9 @@ public class CommentController {
             @RequestBody CreateCommentRequest request,
             HttpSession session
     ) {
-        CreateCommentResponse result = commentService.create((SessionUserDTO) session.getAttribute("loginUser"), scheduleId, request);
+        SessionUserDTO sessionUserDTO = (SessionUserDTO)session.getAttribute("loginUser");
+
+        CreateCommentResponse result = commentService.create(sessionUserDTO, scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -49,7 +51,7 @@ public class CommentController {
     public ResponseEntity<Void> handlerDelete(
             @PathVariable Long commentId
     ) {
-        commentService.delete(commentId);
+        commentService.deleteComment(commentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
