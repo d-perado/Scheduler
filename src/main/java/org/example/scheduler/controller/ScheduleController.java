@@ -19,7 +19,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/api/schedules")
-    public ResponseEntity<CreateScheduleResponse> handlerCreateSchedule(
+    public ResponseEntity<ScheduleResponse> handlerCreateSchedule(
             @Valid @RequestBody CreateScheduleRequest request,
             HttpSession session
     ) {
@@ -29,21 +29,21 @@ public class ScheduleController {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        CreateScheduleResponse result = scheduleService.createSchedule(request, sessionUserDTO.getId());
+        ScheduleResponse result = scheduleService.createSchedule(request, sessionUserDTO.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/schedules/{scheduleId}")
-    public ResponseEntity<GetScheduleResponse> handlerGetSchedule(
+    public ResponseEntity<ScheduleResponse> handlerGetSchedule(
             @PathVariable Long scheduleId
     ) {
-        GetScheduleResponse result = scheduleService.getSchedule(scheduleId);
+        ScheduleResponse result = scheduleService.getSchedule(scheduleId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/api/schedules/{scheduleId}")
-    public ResponseEntity<UpdateScheduleResponse> handlerUpdateSchedule(
+    public ResponseEntity<ScheduleResponse> handlerUpdateSchedule(
             @PathVariable Long scheduleId,
             @Valid @RequestBody UpdateScheduleRequest request,
             HttpSession session
@@ -54,7 +54,7 @@ public class ScheduleController {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        UpdateScheduleResponse result = scheduleService.updateSchedule(sessionUserDTO.getId(), scheduleId, request);
+        ScheduleResponse result = scheduleService.updateSchedule(sessionUserDTO.getId(), scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -72,10 +72,10 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules/all")
-    public ResponseEntity<Page<GetPagedScheduleResponse>> handlerGetPagedSchedule(
+    public ResponseEntity<Page<PagedScheduleResponse>> handlerGetPagedSchedule(
             @RequestParam int pageNo
     ) {
-        Page<GetPagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo);
+        Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

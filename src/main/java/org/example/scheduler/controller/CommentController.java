@@ -21,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/api/schedules/{scheduleId}/comments")
-    public ResponseEntity<CreateCommentResponse> handlerCreateComment(
+    public ResponseEntity<CommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId,
             @Valid @RequestBody CreateCommentRequest request,
             HttpSession session
@@ -32,25 +32,25 @@ public class CommentController {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        CreateCommentResponse result = commentService.createComment(sessionUserDTO, scheduleId, request);
+        CommentResponse result = commentService.createComment(sessionUserDTO, scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<GetCommentResponse>> handlerGetComment(
+    public ResponseEntity<List<CommentResponse>> handlerGetComment(
             @RequestParam Long scheduleId
     ) {
-        List<GetCommentResponse> result = commentService.getComments(scheduleId);
+        List<CommentResponse> result = commentService.getComments(scheduleId);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/api/comments")
-    public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
+    public ResponseEntity<CommentResponse> handlerUpdateComment(
             @Valid @RequestBody UpdateCommentRequest request
     ) {
-        UpdateCommentResponse result = commentService.modifyContent(request);
+        CommentResponse result = commentService.modifyContent(request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

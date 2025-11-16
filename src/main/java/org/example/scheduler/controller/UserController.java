@@ -17,27 +17,27 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<CreateUserResponse> handlerCreateUser(
+    public ResponseEntity<UserResponse> handlerCreateUser(
             @Valid @RequestBody CreateUserRequest request
     ) {
 
-        CreateUserResponse result = userService.createUser(request);
+        UserResponse result = userService.createUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<GetUserResponse> handlerGetUserById(
+    public ResponseEntity<UserResponse> handlerGetUserById(
             @PathVariable Long userId
     ) {
 
-        GetUserResponse result = userService.getUserById(userId);
+        UserResponse result = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PatchMapping("/api/users/{userId}")
-    public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
+    public ResponseEntity<UserResponse> handlerUpdateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserRequest request,
             HttpSession session
@@ -47,7 +47,7 @@ public class UserController {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
 
-        UpdateUserResponse result = userService.updateUser(userId, request);
+        UserResponse result = userService.updateUser(userId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

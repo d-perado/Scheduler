@@ -9,12 +9,14 @@ import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.repository.UserRepository;
+import org.example.scheduler.util.Validator;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +25,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
+    private final Validator validator;
 
     @Transactional
-    public CreateUserResponse createUser(CreateUserRequest request) {
-        boolean existence = userRepository.existsByEmail(request.getEmail());
-
-        if (existence) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_IN);
-        }
+    public UserResponse createUser(CreateUserRequest request) {
+        validator.existUserByEmail(request.getEmail());
 
         User user = new User(request.getName(),
                 request.getEmail(),
@@ -39,35 +38,29 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        return new CreateUserResponse(savedUser);
+        return new UserResponse(savedUser);
     }
 
     @Transactional(readOnly = true)
-    public GetUserResponse getUserById(Long userId) {
-        User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse getUserById(Long userId) {
+        User findedUser = validator.findUserByEmailOrThrow(userRepository.findById(userId));
 
-        return new GetUserResponse(findedUser);
+        return new UserResponse(findedUser);
 
     }
 
     @Transactional
-    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public UserResponse updateUser(Long userId, UpdateUserRequest request) {
+        User findedUser = validator.findUserByEmailOrThrow(userRepository.findById(userId));
 
         findedUser.modify(request.getName(), request.getPassword());
 
-        return new UpdateUserResponse(findedUser);
+        return new UserResponse(findedUser);
     }
 
     @Transactional
     public void deleteUser(Long userId) {
-        boolean existence = userRepository.existsById(userId);
-
-        if (!existence) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        validator.existUserById(userId);
         List<Schedule> foundSchedule = scheduleRepository.findSchedulesByUser_Id(userId);
 
         for (Schedule schedule:foundSchedule) {
@@ -80,8 +73,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public SessionUserDTO login(LoginRequest request) {
-        User findedUser = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User findedUser = validator.findUserByEmailOrThrow(userRepository.findUserByEmail(request.getEmail()));
 
         if (!findedUser.isValid(request.getPassword(), passwordEncoder)) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);

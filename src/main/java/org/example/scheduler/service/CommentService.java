@@ -7,10 +7,7 @@ import org.example.scheduler.entity.Comment;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.CommentRepository;
-import org.example.scheduler.repository.ScheduleRepository;
-import org.example.scheduler.repository.UserRepository;
-import org.example.scheduler.util.exception.CustomException;
-import org.example.scheduler.util.exception.ErrorCode;
+import org.example.scheduler.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,54 +19,49 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
-
+    private final Validator validator;
 
     @Transactional
-    public CreateCommentResponse createComment(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
-        User currentUser = userRepository.findById(sessionUserDTO.getId()).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public CommentResponse createComment(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
+        User currentUser = validator.findUserByIdOrThrow(sessionUserDTO.getId());
 
-        Schedule currentSchedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        Schedule currentSchedule = validator.existScheduleById(scheduleId);
 
         Comment comment = new Comment(request.getContent(), currentUser, currentSchedule);
 
         Comment savedComment = commentRepository.save(comment);
 
-        return new CreateCommentResponse(savedComment);
+        return new CommentResponse(savedComment);
     }
 
     @Transactional(readOnly = true)
-    public List<GetCommentResponse> getComments(Long scheduleId) {
+    public List<CommentResponse> getComments(Long scheduleId) {
         List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
 
         return foundComments.stream()
-                .map(GetCommentResponse::new)
+                .map(CommentResponse::new)
                 .toList();
     }
 
     @Transactional
-    public UpdateCommentResponse modifyContent(UpdateCommentRequest request) {
-        Comment comment = commentRepository.findById(request.getId()).orElseThrow(
-                () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+    public CommentResponse modifyContent(UpdateCommentRequest request) {
+        Comment comment = validator.getCommentByIdOrThrow(request);
 
         comment.modify(request.getContent());
 
-        return new UpdateCommentResponse(comment);
+        return new CommentResponse(comment);
     }
+
 
     @Transactional
     public void deleteComment(Long commentId) {
         boolean existence = commentRepository.existsById(commentId);
 
-        if (!existence) {
-            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
-        }
+        validator.validateCommentExists(existence);
 
         commentRepository.deleteById(commentId);
     }
+
 
     @Transactional(readOnly = true)
     public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {

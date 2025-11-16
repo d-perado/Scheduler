@@ -6,7 +6,7 @@ import org.example.scheduler.entity.Schedule;
 import java.time.LocalDateTime;
 
 @Getter
-public class GetScheduleResponse {
+public class ScheduleResponse {
     private final Long id;
     private final String title;
     private final String content;
@@ -14,7 +14,7 @@ public class GetScheduleResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public GetScheduleResponse(Schedule schedule) {
+    public ScheduleResponse(Schedule schedule) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();

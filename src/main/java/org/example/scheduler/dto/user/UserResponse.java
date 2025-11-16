@@ -6,14 +6,14 @@ import org.example.scheduler.entity.User;
 import java.time.LocalDateTime;
 
 @Getter
-public class CreateUserResponse {
+public class UserResponse {
     private final Long id;
     private final String name;
     private final String email;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public CreateUserResponse(User user) {
+    public UserResponse(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();

@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.UserRepository;
-import org.example.scheduler.util.ScheduleValidator;
-import org.example.scheduler.util.exception.CustomException;
-import org.example.scheduler.util.exception.ErrorCode;
+import org.example.scheduler.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,57 +19,57 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final UserRepository userRepository;
-    private final ScheduleValidator scheduleValidator;
+    private final Validator validator;
     private final CommentRepository commentRepository;
+
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
-        User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
+        User findedUser = validator.findUserByIdOrThrow(userId);
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new CreateScheduleResponse(savedSchedule);
+        return new ScheduleResponse(savedSchedule);
     }
 
-    @Transactional(readOnly = true)
-    public GetScheduleResponse getSchedule(Long scheduleId) {
-        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        return new GetScheduleResponse(findedSchedule);
+
+    @Transactional(readOnly = true)
+    public ScheduleResponse getSchedule(Long scheduleId) {
+        Schedule findedSchedule = validator.existScheduleById(scheduleId);
+
+        return new ScheduleResponse(findedSchedule);
     }
 
     @Transactional
-    public UpdateScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
+    public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
 
-        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
+        Schedule findedSchedule = validator.existScheduleById(scheduleId);
 
-        scheduleValidator.validateUser(userId, findedSchedule);
+        validator.validateScheduleOwner(userId, findedSchedule);
 
         findedSchedule.modify(request.getTitle(), request.getContent());
 
-        return new UpdateScheduleResponse(findedSchedule);
+        return new ScheduleResponse(findedSchedule);
     }
 
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
-        Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
+        Schedule findedSchedule = validator.existScheduleById(scheduleId);
 
-        scheduleValidator.validateUser(userId, findedSchedule);
+        validator.validateScheduleOwner(userId, findedSchedule);
 
         commentRepository.deleteAllBySchedule_Id(scheduleId);
         scheduleRepository.deleteById(scheduleId);
     }
 
 
-
     @Transactional(readOnly = true)
-    public Page<GetPagedScheduleResponse> getPagedSchedule(int pageNo) {
-        Page<Schedule> pagedSchedules = scheduleRepository.findAll(PageRequest.of(pageNo,10,Sort.by(Sort.Direction.DESC,"updatedAt")));
+    public Page<PagedScheduleResponse> getPagedSchedule(int pageNo) {
+        Page<Schedule> pagedSchedules = scheduleRepository
+                .findAll(PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "updatedAt")));
 
-        return pagedSchedules.map(x->new GetPagedScheduleResponse(x,commentRepository.countCommentsBySchedule_Id(x.getId())));
-
+        return pagedSchedules.map(x -> new PagedScheduleResponse(x, commentRepository.countCommentsBySchedule_Id(x.getId())));
     }
 }

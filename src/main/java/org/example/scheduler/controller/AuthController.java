@@ -4,14 +4,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.auth.LoginRequest;
-import org.example.scheduler.dto.auth.LoginResponse;
 import org.example.scheduler.dto.user.SessionUserDTO;
 import org.example.scheduler.service.UserService;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
