@@ -27,7 +27,7 @@ public class CommentService {
 
 
     @Transactional
-    public CreateCommentResponse create(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
+    public CreateCommentResponse createComment(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
         User currentUser = userRepository.findById(sessionUserDTO.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 

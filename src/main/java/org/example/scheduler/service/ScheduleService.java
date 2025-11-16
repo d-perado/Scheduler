@@ -24,7 +24,6 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final ScheduleValidator scheduleValidator;
     private final CommentRepository commentRepository;
-
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
@@ -49,9 +48,7 @@ public class ScheduleService {
 
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        if (!findedSchedule.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_USER);
-        }
+        scheduleValidator.validateUser(userId, findedSchedule);
 
         findedSchedule.modify(request.getTitle(), request.getContent());
 
@@ -62,13 +59,13 @@ public class ScheduleService {
     public void deleteSchedule(Long userId, Long scheduleId) {
         Schedule findedSchedule = scheduleValidator.checkExistScheduleById(scheduleId);
 
-        if (!findedSchedule.getUser().getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_USER);
-        }
+        scheduleValidator.validateUser(userId, findedSchedule);
 
         commentRepository.deleteAllBySchedule_Id(scheduleId);
         scheduleRepository.deleteById(scheduleId);
     }
+
+
 
     @Transactional(readOnly = true)
     public Page<GetPagedScheduleResponse> getPagedSchedule(int pageNo) {

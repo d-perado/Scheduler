@@ -3,6 +3,8 @@ package org.example.scheduler.util;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.repository.ScheduleRepository;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,5 +15,10 @@ public class ScheduleValidator {
     public Schedule checkExistScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 일정입니다."));
+    }
+    public void validateUser(Long userId, Schedule findedSchedule) {
+        if (!findedSchedule.getUser().getId().equals(userId)) {
+            throw new CustomException(ErrorCode.INVALID_USER);
+        }
     }
 }

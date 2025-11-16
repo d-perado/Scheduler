@@ -32,7 +32,7 @@ public class CommentController {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        CreateCommentResponse result = commentService.create(sessionUserDTO, scheduleId, request);
+        CreateCommentResponse result = commentService.createComment(sessionUserDTO, scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
