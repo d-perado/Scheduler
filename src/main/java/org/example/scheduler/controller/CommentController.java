@@ -46,7 +46,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/apiW/comments")
+    @PatchMapping("/api/comments")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @Valid @RequestBody UpdateCommentRequest request
     ) {
