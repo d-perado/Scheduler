@@ -8,11 +8,13 @@ import lombok.Getter;
 @Getter
 public class CreateUserRequest {
     @NotNull(message = "이름을 입력해주세요.")
-    @Size(min = 2, max = 30)
+    @Size(min = 2, max = 30, message = "이름은 2~30자까지만 가능합니다.")
     private String name;
+
     @NotNull(message = "이메일을 입력해주세요.")
-    @Email
+    @Email(message = "이메일 형식만 입력 가능합니다.")
     private String email;
+
     @NotNull(message = "패스워드를 입력해주세요.")
     private String password;
 }

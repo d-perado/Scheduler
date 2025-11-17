@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class TimeBaseEntity {
     @CreatedDate
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
 

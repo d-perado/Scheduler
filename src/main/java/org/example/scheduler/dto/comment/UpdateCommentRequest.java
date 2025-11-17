@@ -8,6 +8,7 @@ import lombok.Getter;
 public class UpdateCommentRequest {
     @NotNull
     private Long id;
+
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 }

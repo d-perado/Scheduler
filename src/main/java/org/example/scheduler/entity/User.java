@@ -38,6 +38,6 @@ public class User extends TimeBaseEntity {
     }
 
     public boolean isValid(String password, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(password,this.password);
+        return passwordEncoder.matches(password, this.password);
     }
 }
