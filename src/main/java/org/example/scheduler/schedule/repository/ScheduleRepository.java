@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     void deleteAllByUser_Id(Long userId);

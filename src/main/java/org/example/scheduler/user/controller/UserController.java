@@ -46,6 +46,7 @@ public class UserController {
             HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
         if (!sessionUserDTO.getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }

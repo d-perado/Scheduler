@@ -48,7 +48,6 @@ public class UserService {
         User foundUser = validator.findUserByIdOrThrow(userId);
 
         return new UserResponse(foundUser);
-
     }
 
     @Transactional
