@@ -21,7 +21,6 @@ public class Validator {
     private final ScheduleRepository scheduleRepository;
     private final CommentRepository commentRepository;
 
-
     public Schedule existScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(()->new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }

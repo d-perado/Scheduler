@@ -5,7 +5,6 @@ import org.example.scheduler.entity.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.entity.User;
 import org.example.scheduler.repository.CommentRepository;
-import org.example.scheduler.repository.UserRepository;
 import org.example.scheduler.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,8 +31,6 @@ public class ScheduleService {
 
         return new ScheduleResponse(savedSchedule);
     }
-
-
 
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(Long scheduleId) {
@@ -63,7 +60,6 @@ public class ScheduleService {
         commentRepository.deleteAllBySchedule_Id(scheduleId);
         scheduleRepository.deleteById(scheduleId);
     }
-
 
     @Transactional(readOnly = true)
     public Page<PagedScheduleResponse> getPagedSchedule(int pageNo) {

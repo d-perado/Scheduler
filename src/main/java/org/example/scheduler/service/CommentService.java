@@ -52,7 +52,6 @@ public class CommentService {
         return new CommentResponse(comment);
     }
 
-
     @Transactional
     public void deleteComment(Long commentId) {
         boolean existence = commentRepository.existsById(commentId);
@@ -61,7 +60,6 @@ public class CommentService {
 
         commentRepository.deleteById(commentId);
     }
-
 
     @Transactional(readOnly = true)
     public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {
