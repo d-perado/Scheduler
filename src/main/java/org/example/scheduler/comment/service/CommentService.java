@@ -39,7 +39,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getComments(Long scheduleId) {
-        List<Comment> foundComments = commentRepository.findCommentsBySchedule_Id(scheduleId);
+        List<Comment> foundComments = commentRepository.findCommentsWithUserAndSchedule(scheduleId);
 
         return foundComments.stream()
                 .map(CommentResponse::new)
