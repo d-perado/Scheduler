@@ -1,0 +1,27 @@
+package org.example.scheduler.comment.dto;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.example.scheduler.comment.entity.Comment;
+
+import java.time.LocalDateTime;
+
+@Getter
+@RequiredArgsConstructor
+public class CommentResponse {
+    private final Long id;
+    private final String content;
+    private final String userName;
+    private final Long scheduleId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+
+    public CommentResponse(Comment comment) {
+        this.id = comment.getId();
+        this.content = comment.getContent();
+        this.userName = comment.getUser().getName();
+        this.scheduleId = comment.getSchedule().getId();
+        this.createdAt = comment.getCreatedAt();
+        this.updatedAt = comment.getUpdatedAt();
+    }
+}

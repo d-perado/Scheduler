@@ -1,0 +1,77 @@
+package org.example.scheduler.comment.controller;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.example.scheduler.comment.dto.CommentResponse;
+import org.example.scheduler.comment.dto.CreateCommentRequest;
+import org.example.scheduler.comment.dto.PagedCommentDTO;
+import org.example.scheduler.comment.dto.UpdateCommentRequest;
+import org.example.scheduler.user.dto.SessionUserDTO;
+import org.example.scheduler.comment.service.CommentService;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+public class CommentController {
+    private final CommentService commentService;
+
+    @PostMapping("/api/schedules/{scheduleId}/comments")
+    public ResponseEntity<CommentResponse> handlerCreateComment(
+            @PathVariable Long scheduleId,
+            @Valid @RequestBody CreateCommentRequest request,
+            HttpSession session
+    ) {
+        SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
+
+        if (sessionUserDTO == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        CommentResponse result = commentService.createComment(sessionUserDTO, scheduleId, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<CommentResponse>> handlerGetComment(
+            @RequestParam Long scheduleId
+    ) {
+        List<CommentResponse> result = commentService.getComments(scheduleId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PatchMapping("/api/comments")
+    public ResponseEntity<CommentResponse> handlerUpdateComment(
+            @Valid @RequestBody UpdateCommentRequest request
+    ) {
+        CommentResponse result = commentService.modifyContent(request);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @DeleteMapping("/api/{commentId}")
+    public ResponseEntity<Void> handlerDelete(
+            @PathVariable Long commentId
+    ) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/comments/{scheduleId}")
+    public ResponseEntity<Page<PagedCommentDTO>> handlerGetComments(
+            @PathVariable Long scheduleId,
+            @RequestParam int pageNo
+    ) {
+        Page<PagedCommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+}

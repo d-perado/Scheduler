@@ -1,18 +1,16 @@
 package org.example.scheduler.util;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scheduler.dto.comment.UpdateCommentRequest;
-import org.example.scheduler.entity.Comment;
-import org.example.scheduler.entity.Schedule;
-import org.example.scheduler.entity.User;
-import org.example.scheduler.repository.CommentRepository;
-import org.example.scheduler.repository.ScheduleRepository;
-import org.example.scheduler.repository.UserRepository;
+import org.example.scheduler.comment.dto.UpdateCommentRequest;
+import org.example.scheduler.comment.entity.Comment;
+import org.example.scheduler.schedule.entity.Schedule;
+import org.example.scheduler.user.entity.User;
+import org.example.scheduler.comment.repository.CommentRepository;
+import org.example.scheduler.schedule.repository.ScheduleRepository;
+import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
