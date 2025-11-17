@@ -42,19 +42,19 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponse getUserById(Long userId) {
-        User findedUser = validator.findUserByEmailOrThrow(userRepository.findById(userId));
+        User foundUser = validator.findUserByIdOrThrow(userId);
 
-        return new UserResponse(findedUser);
+        return new UserResponse(foundUser);
 
     }
 
     @Transactional
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User findedUser = validator.findUserByEmailOrThrow(userRepository.findById(userId));
+        User foundUser = validator.findUserByIdOrThrow(userId);
 
-        findedUser.modify(request.getName(), request.getPassword());
+        foundUser.modify(request.getName(), request.getPassword(),passwordEncoder);
 
-        return new UserResponse(findedUser);
+        return new UserResponse(foundUser);
     }
 
     @Transactional
@@ -72,13 +72,13 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public SessionUserDTO login(LoginRequest request) {
-        User findedUser = validator.findUserByEmailOrThrow(userRepository.findUserByEmail(request.getEmail()));
+        User foundUser = validator.findUserByEmailOrThrow(request.getEmail());
 
-        if (!findedUser.isValid(request.getPassword(), passwordEncoder)) {
+        if (!foundUser.isValid(request.getPassword(), passwordEncoder)) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
 
-        return new SessionUserDTO(findedUser.getId(), findedUser.getEmail());
+        return new SessionUserDTO(foundUser.getId(), foundUser.getEmail());
     }
 
 }

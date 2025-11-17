@@ -14,7 +14,7 @@ public enum ErrorCode {
     ALREADY_LOGGED_IN(HttpStatus.CONFLICT,"이미 로그인 되어 있습니다."),
     INVALID_USER(HttpStatus.UNAUTHORIZED, "유효하지 않은 사용자입니다."),
     ALREADY_EXIST_IN(HttpStatus.CONFLICT,"이미 가입된 사용자입니다."),
-    INVALID_PASSWORD(HttpStatus.NOT_FOUND, "유효하지 않은 패스워드 입니다."),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 패스워드 입니다."),
 
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 일정 입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저 입니다."),

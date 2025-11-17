@@ -23,9 +23,9 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
-        User findedUser = validator.findUserByIdOrThrow(userId);
+        User foundUser = validator.findUserByIdOrThrow(userId);
 
-        Schedule schedule = new Schedule(request.getTitle(), request.getContent(), findedUser);
+        Schedule schedule = new Schedule(request.getTitle(), request.getContent(), foundUser);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
@@ -34,28 +34,28 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(Long scheduleId) {
-        Schedule findedSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId);
 
-        return new ScheduleResponse(findedSchedule);
+        return new ScheduleResponse(foundSchedule);
     }
 
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
 
-        Schedule findedSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId);
 
-        validator.validateScheduleOwner(userId, findedSchedule);
+        validator.validateScheduleOwner(userId, foundSchedule);
 
-        findedSchedule.modify(request.getTitle(), request.getContent());
+        foundSchedule.modify(request.getTitle(), request.getContent());
 
-        return new ScheduleResponse(findedSchedule);
+        return new ScheduleResponse(foundSchedule);
     }
 
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
-        Schedule findedSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId);
 
-        validator.validateScheduleOwner(userId, findedSchedule);
+        validator.validateScheduleOwner(userId, foundSchedule);
 
         commentRepository.deleteAllBySchedule_Id(scheduleId);
         scheduleRepository.deleteById(scheduleId);

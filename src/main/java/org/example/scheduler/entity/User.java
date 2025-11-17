@@ -15,7 +15,7 @@ public class User extends TimeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 4, nullable = false)
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Column(unique = true)
@@ -32,9 +32,9 @@ public class User extends TimeBaseEntity {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void modify(String name, String password) {
+    public void modify(String name, String password, PasswordEncoder passwordEncoder) {
         this.name = name;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 
     public boolean isValid(String password, PasswordEncoder passwordEncoder) {

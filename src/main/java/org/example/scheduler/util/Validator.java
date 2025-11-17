@@ -24,8 +24,8 @@ public class Validator {
     public Schedule existScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(()->new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }
-    public void validateScheduleOwner(Long userId, Schedule findedSchedule) {
-        if (!findedSchedule.getUser().getId().equals(userId)) {
+    public void validateScheduleOwner(Long userId, Schedule foundSchedule) {
+        if (!foundSchedule.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
     }
@@ -58,8 +58,8 @@ public class Validator {
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-    public User findUserByEmailOrThrow(Optional<User> user) {
-        return user
+    public User findUserByEmailOrThrow(String email) {
+        return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
