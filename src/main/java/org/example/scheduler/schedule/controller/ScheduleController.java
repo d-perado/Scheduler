@@ -79,7 +79,7 @@ public class ScheduleController {
             @RequestParam int pageNo,
             @RequestParam int pageSize
     ) {
-        Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo,pageSize);
+        Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

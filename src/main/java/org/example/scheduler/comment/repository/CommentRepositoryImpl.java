@@ -26,7 +26,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
         QComment comment = QComment.comment;
         QSchedule schedule = QSchedule.schedule;
 
-        JPAQuery<Tuple> query = new JPAQuery<>();
+        JPAQuery<Tuple> query = new JPAQuery<>(em);
 
         return query.select(schedule.id,comment.count())
                 .from(comment)

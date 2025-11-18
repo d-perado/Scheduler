@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.example.scheduler.schedule.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -71,9 +72,17 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PagedScheduleResponse> getPagedSchedule(int pageNo,int pageSize) {
-        List<Schedule> pagedSchedules = scheduleRepository
-                .findAll(PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"))).getContent();
+    public Page<PagedScheduleResponse> getPagedSchedule(int pageNo, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
+                Sort.by(Sort.Direction.DESC, "updatedAt"));
+        Page<Schedule> schedulePage = scheduleRepository.findAll(pageRequest);
+
+        List<Schedule> pagedSchedules = schedulePage.getContent();
+
+        if (pagedSchedules.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageRequest, schedulePage.getTotalElements());
+        }
 
         List<Long> scheduleIds = pagedSchedules.stream()
                 .map(Schedule::getId)
@@ -82,12 +91,19 @@ public class ScheduleService {
         List<Tuple> commentCounts = commentRepository.countCommentsByScheduleIds(scheduleIds);
 
         Map<Long, Long> commentCountMap = commentCounts.stream()
-                .collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, Long.class)));
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(0, Long.class),
+                        tuple -> tuple.get(1, Long.class)
+                ));
 
         List<PagedScheduleResponse> response = pagedSchedules.stream()
-                .map(scheduleItem -> new PagedScheduleResponse(scheduleItem, Math.toIntExact(commentCountMap.get(scheduleItem.getId()))))
+                .map(scheduleItem -> {
+                    long count = commentCountMap.getOrDefault(scheduleItem.getId(), 0L);
+                    return new PagedScheduleResponse(scheduleItem, Math.toIntExact(count));
+                })
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(response, PageRequest.of(pageNo, pageSize), pagedSchedules.size());
+        return new PageImpl<>(response, pageRequest, schedulePage.getTotalElements());
     }
+
 }
