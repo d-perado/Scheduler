@@ -88,5 +88,4 @@ public class UserService {
 
         return new SessionUserDTO(foundUser.getId(), foundUser.getEmail());
     }
-
 }
