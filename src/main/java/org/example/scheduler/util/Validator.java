@@ -1,5 +1,6 @@
 package org.example.scheduler.util;
 
+import org.example.scheduler.comment.entity.Comment;
 import org.example.scheduler.schedule.entity.Schedule;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
@@ -24,5 +25,9 @@ public class Validator {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
-
+    public void validateCommentOwner(Long loginUserId, Comment comment) {
+        if(!comment.getUser().getId().equals(loginUserId)){
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+    }
 }

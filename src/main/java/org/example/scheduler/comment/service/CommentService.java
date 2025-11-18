@@ -13,15 +13,12 @@ import org.example.scheduler.user.entity.User;
 import org.example.scheduler.comment.repository.CommentRepository;
 import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
-import org.example.scheduler.util.exception.CustomException;
-import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +51,10 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse modifyContent(UpdateCommentRequest request) {
-        Comment comment = commentRepository.findCommentByIdOrThrow(request.getId());
+    public CommentResponse modifyContent(Long commentId, UpdateCommentRequest request, Long loginUserId) {
+        Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
+
+        validator.validateCommentOwner(loginUserId, comment);
 
         comment.modify(request.getContent());
 
@@ -63,14 +62,14 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId,Long currentUserId) {
+    public void deleteComment(Long commentId,Long loginUserId) {
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
 
-        if(!Objects.equals(comment.getUser().getId(), currentUserId)){
-            throw new CustomException(ErrorCode.UNAUTHORIZED);
-        }
+        validator.validateCommentOwner(loginUserId, comment);
+
         commentRepository.deleteById(commentId);
     }
+
 
     @Transactional(readOnly = true)
     public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {
@@ -78,4 +77,5 @@ public class CommentService {
 
         return pagedComments.map(PagedCommentDTO::new);
     }
+
 }

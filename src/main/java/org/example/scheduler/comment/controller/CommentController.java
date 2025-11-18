@@ -48,11 +48,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/api/comments")
+    @PatchMapping("/api/comments/{commentId}")
     public ResponseEntity<CommentResponse> handlerUpdateComment(
-            @Valid @RequestBody UpdateCommentRequest request
+            @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequest request, HttpSession session
     ) {
-        CommentResponse result = commentService.modifyContent(request);
+        SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+        CommentResponse result = commentService.modifyContent(commentId, request, loginUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
