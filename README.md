@@ -8,7 +8,7 @@
 ![erd.png](erd.png)
 ---
 ## 3. API명세서
-https://documenter.getpostman.com/view/24302728/2sB3Wwqx9n
+[https://documenter.getpostman.com/view/24302728/2sB3Wwqx9n](https://documenter.getpostman.com/view/24302728/2sB3Wwqx9n)
 
 ---
 ## 4. 기술 스택
