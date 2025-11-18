@@ -25,9 +25,4 @@ public class Validator {
         }
     }
 
-    public void validateCommentExists(boolean existence) {
-        if (!existence) {
-            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
-        }
-    }
 }
