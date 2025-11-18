@@ -30,9 +30,9 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
-        User currentUser = validator.findUserByIdOrThrow(sessionUserDTO.getId(), userRepository);
+        User currentUser = userRepository.findUserByIdOrThrow(sessionUserDTO.getId());
 
-        Schedule currentSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
+        Schedule currentSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
 
         Comment comment = new Comment(request.getContent(), currentUser, currentSchedule);
 
@@ -52,7 +52,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse modifyContent(UpdateCommentRequest request) {
-        Comment comment = validator.getCommentByIdOrThrow(request, commentRepository);
+        Comment comment = commentRepository.findCommentByIdOrThrow(request.getId());
 
         comment.modify(request.getContent());
 

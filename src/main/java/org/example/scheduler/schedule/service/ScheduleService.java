@@ -35,7 +35,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
-        User foundUser = validator.findUserByIdOrThrow(userId, userRepository);
+        User foundUser = userRepository.findUserByIdOrThrow(userId);
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), foundUser);
 
@@ -46,14 +46,14 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(Long scheduleId) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
+        Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
 
         return new ScheduleResponse(foundSchedule);
     }
 
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
+        Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
 
         validator.validateScheduleOwner(userId, foundSchedule);
 
@@ -64,7 +64,7 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
+        Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
 
         validator.validateScheduleOwner(userId, foundSchedule);
 
