@@ -1,13 +1,11 @@
 package org.example.scheduler.util;
 
-import lombok.RequiredArgsConstructor;
 import org.example.scheduler.schedule.entity.Schedule;
 import org.example.scheduler.util.exception.CustomException;
 import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class Validator {
     public void validateScheduleOwner(Long userId, Schedule foundSchedule) {
         if (!foundSchedule.getUser().getId().equals(userId)) {
