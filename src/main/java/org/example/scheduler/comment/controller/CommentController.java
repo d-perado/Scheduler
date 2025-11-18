@@ -9,8 +9,6 @@ import org.example.scheduler.comment.dto.PagedCommentDTO;
 import org.example.scheduler.comment.dto.UpdateCommentRequest;
 import org.example.scheduler.user.dto.SessionUserDTO;
 import org.example.scheduler.comment.service.CommentService;
-import org.example.scheduler.util.exception.CustomException;
-import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +47,9 @@ public class CommentController {
             @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequest request, HttpSession session
     ) {
         SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
         CommentResponse result = commentService.modifyContent(commentId, request, loginUser.getId());
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
