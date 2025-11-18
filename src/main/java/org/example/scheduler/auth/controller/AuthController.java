@@ -20,9 +20,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> handlerLogin(
-            @Valid @RequestBody LoginRequest request,
-            HttpSession session
-    ) {
+            @Valid @RequestBody LoginRequest request, HttpSession session) {
         if (session.getAttribute("loginUser") != null) {
             throw new CustomException(ErrorCode.ALREADY_LOGGED_IN);
         }

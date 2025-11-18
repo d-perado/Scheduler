@@ -25,8 +25,9 @@ public class Validator {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
+
     public void validateCommentOwner(Long loginUserId, Comment comment) {
-        if(!comment.getUser().getId().equals(loginUserId)){
+        if (!comment.getUser().getId().equals(loginUserId)) {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
     }

@@ -17,7 +17,7 @@ import java.util.List;
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     private final JPAQueryFactory queryFactory;
 
@@ -26,7 +26,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         QComment comment = QComment.comment;
         QSchedule schedule = QSchedule.schedule;
 
-        JPAQuery<Tuple> query = new JPAQuery<>(em);
+        JPAQuery<Tuple> query = new JPAQuery<>(entityManager);
 
         return query.select(schedule.id, comment.count())
                 .from(comment)

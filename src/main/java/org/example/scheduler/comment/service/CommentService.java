@@ -62,7 +62,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId,Long loginUserId) {
+    public void deleteComment(Long commentId, Long loginUserId) {
         Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
 
         validator.validateCommentOwner(loginUserId, comment);
