@@ -76,9 +76,10 @@ public class ScheduleController {
 
     @GetMapping("/schedules/all")
     public ResponseEntity<Page<PagedScheduleResponse>> handlerGetPagedSchedule(
-            @RequestParam int pageNo
+            @RequestParam int pageNo,
+            @RequestParam int pageSize
     ) {
-        Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo);
+        Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo,pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

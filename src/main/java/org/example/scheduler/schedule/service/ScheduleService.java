@@ -71,9 +71,9 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PagedScheduleResponse> getPagedSchedule(int pageNo) {
+    public Page<PagedScheduleResponse> getPagedSchedule(int pageNo,int pageSize) {
         List<Schedule> pagedSchedules = scheduleRepository
-                .findAll(PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "updatedAt"))).getContent();
+                .findAll(PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"))).getContent();
 
         List<Long> scheduleIds = pagedSchedules.stream()
                 .map(Schedule::getId)
@@ -88,6 +88,6 @@ public class ScheduleService {
                 .map(scheduleItem -> new PagedScheduleResponse(scheduleItem, Math.toIntExact(commentCountMap.get(scheduleItem.getId()))))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(response, PageRequest.of(pageNo, 10), pagedSchedules.size());
+        return new PageImpl<>(response, PageRequest.of(pageNo, pageSize), pagedSchedules.size());
     }
 }
