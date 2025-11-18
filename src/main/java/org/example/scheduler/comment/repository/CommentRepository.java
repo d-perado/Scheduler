@@ -16,6 +16,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
     void deleteAllBySchedule_Id(Long scheduleId);
 
     default Comment findCommentByIdOrThrow(Long id) {
-        return findById(id).orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        return findById(id).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 }

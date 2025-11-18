@@ -26,6 +26,7 @@ public class AuthController {
         if (session.getAttribute("loginUser") != null) {
             throw new CustomException(ErrorCode.ALREADY_LOGGED_IN);
         }
+
         SessionUserDTO sessionUserDTO = userService.login(request);
 
         session.setAttribute("loginUser", sessionUserDTO);

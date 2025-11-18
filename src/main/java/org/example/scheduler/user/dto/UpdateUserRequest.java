@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class UpdateUserRequest {
-    @NotBlank
     private Long id;
 
     @NotBlank(message = "이름을 입력해주세요.")

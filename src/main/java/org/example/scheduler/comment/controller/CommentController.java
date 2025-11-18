@@ -42,6 +42,7 @@ public class CommentController {
     public ResponseEntity<List<CommentResponse>> handlerGetComment(
             @RequestParam Long scheduleId
     ) {
+
         List<CommentResponse> result = commentService.getComments(scheduleId);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

@@ -39,15 +39,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PatchMapping("/api/users/{userId}")
+    @PatchMapping("/api/users")
     public ResponseEntity<UserResponse> handlerUpdateUser(
-            @PathVariable Long userId, @Valid @RequestBody UpdateUserRequest request, HttpSession session
+            @Valid @RequestBody UpdateUserRequest request, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
-        if (!sessionUserDTO.getId().equals(userId)) {
-            throw new CustomException(ErrorCode.INVALID_USER);
-        }
+        Long userId = sessionUserDTO.getId();
 
         UserResponse result = userService.updateUser(userId, request);
 
