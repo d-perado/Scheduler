@@ -41,9 +41,7 @@ public class UserController {
 
     @PatchMapping("/api/users/{userId}")
     public ResponseEntity<UserResponse> handlerUpdateUser(
-            @PathVariable Long userId,
-            @Valid @RequestBody UpdateUserRequest request,
-            HttpSession session
+            @PathVariable Long userId, @Valid @RequestBody UpdateUserRequest request, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 

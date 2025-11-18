@@ -51,7 +51,6 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
-
         Schedule foundSchedule = validator.existScheduleById(scheduleId);
 
         validator.validateScheduleOwner(userId, foundSchedule);
@@ -73,14 +72,13 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public Page<PagedScheduleResponse> getPagedSchedule(int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
 
-        PageRequest pageRequest = PageRequest.of(pageNo, pageSize,
-                Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageRequest);
 
         List<Schedule> pagedSchedules = schedulePage.getContent();
 
-        if (pagedSchedules.isEmpty()) {
+        if (pagedSchedules.isEmpty()) { //데이터 없으면 빈페이지
             return new PageImpl<>(Collections.emptyList(), pageRequest, schedulePage.getTotalElements());
         }
 
@@ -98,7 +96,7 @@ public class ScheduleService {
 
         List<PagedScheduleResponse> response = pagedSchedules.stream()
                 .map(scheduleItem -> {
-                    long count = commentCountMap.getOrDefault(scheduleItem.getId(), 0L);
+                    long count = commentCountMap.getOrDefault(scheduleItem.getId(), 0L);//댓글갯수 0일때에도 값 넣어주기
                     return new PagedScheduleResponse(scheduleItem, Math.toIntExact(count));
                 })
                 .collect(Collectors.toList());

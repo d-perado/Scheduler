@@ -20,13 +20,15 @@ public class Validator {
     private final CommentRepository commentRepository;
 
     public Schedule existScheduleById(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId).orElseThrow(()->new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
+        return scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }
+
     public void validateScheduleOwner(Long userId, Schedule foundSchedule) {
         if (!foundSchedule.getUser().getId().equals(userId)) {
             throw new CustomException(ErrorCode.INVALID_USER);
         }
     }
+
     public User findUserByIdOrThrow(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -39,6 +41,7 @@ public class Validator {
             throw new CustomException(ErrorCode.ALREADY_EXIST_IN);
         }
     }
+
     public void existUserById(Long userId) {
         boolean existence = userRepository.existsById(userId);
 
@@ -46,11 +49,13 @@ public class Validator {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
+
     public void validateCommentExists(boolean existence) {
         if (!existence) {
             throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
         }
     }
+
     public Comment getCommentByIdOrThrow(UpdateCommentRequest request) {
         return commentRepository.findById(request.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));

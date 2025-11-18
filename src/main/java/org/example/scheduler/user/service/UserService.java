@@ -54,7 +54,7 @@ public class UserService {
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
         User foundUser = validator.findUserByIdOrThrow(userId);
 
-        foundUser.modify(request.getName(), request.getPassword(),passwordEncoder);
+        foundUser.modify(request.getName(), request.getPassword(), passwordEncoder);
 
         return new UserResponse(foundUser);
     }
@@ -64,7 +64,7 @@ public class UserService {
         validator.existUserById(userId);
         List<Schedule> foundSchedule = scheduleRepository.findSchedulesByUser_Id(userId);
 
-        for (Schedule schedule:foundSchedule) {
+        for (Schedule schedule : foundSchedule) {
             commentRepository.deleteAllBySchedule_Id(schedule.getId());
         }
         scheduleRepository.deleteAllByUser_Id(userId);

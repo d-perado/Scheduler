@@ -25,9 +25,7 @@ public class CommentController {
 
     @PostMapping("/api/schedules/{scheduleId}/comments")
     public ResponseEntity<CommentResponse> handlerCreateComment(
-            @PathVariable Long scheduleId,
-            @Valid @RequestBody CreateCommentRequest request,
-            HttpSession session
+            @PathVariable Long scheduleId, @Valid @RequestBody CreateCommentRequest request, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
@@ -67,8 +65,7 @@ public class CommentController {
 
     @GetMapping("/comments/{scheduleId}")
     public ResponseEntity<Page<PagedCommentDTO>> handlerGetComments(
-            @PathVariable Long scheduleId,
-            @RequestParam int pageNo
+            @PathVariable Long scheduleId, @RequestParam(defaultValue = "0") int pageNo
     ) {
         Page<PagedCommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
 

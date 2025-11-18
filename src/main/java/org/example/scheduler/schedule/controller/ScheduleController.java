@@ -23,8 +23,7 @@ public class ScheduleController {
 
     @PostMapping("/api/schedules")
     public ResponseEntity<ScheduleResponse> handlerCreateSchedule(
-            @Valid @RequestBody CreateScheduleRequest request,
-            HttpSession session
+            @Valid @RequestBody CreateScheduleRequest request, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
@@ -47,9 +46,7 @@ public class ScheduleController {
 
     @PatchMapping("/api/schedules/{scheduleId}")
     public ResponseEntity<ScheduleResponse> handlerUpdateSchedule(
-            @PathVariable Long scheduleId,
-            @Valid @RequestBody UpdateScheduleRequest request,
-            HttpSession session
+            @PathVariable Long scheduleId, @Valid @RequestBody UpdateScheduleRequest request, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
@@ -64,8 +61,7 @@ public class ScheduleController {
 
     @DeleteMapping("/api/schedules/{scheduleId}")
     public ResponseEntity<Void> handlerDeleteSchedule(
-            @PathVariable Long scheduleId,
-            HttpSession session
+            @PathVariable Long scheduleId, HttpSession session
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
@@ -76,8 +72,7 @@ public class ScheduleController {
 
     @GetMapping("/schedules/all")
     public ResponseEntity<Page<PagedScheduleResponse>> handlerGetPagedSchedule(
-            @RequestParam int pageNo,
-            @RequestParam int pageSize
+            @RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "0") int pageSize
     ) {
         Page<PagedScheduleResponse> result = scheduleService.getPagedSchedule(pageNo, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(result);
