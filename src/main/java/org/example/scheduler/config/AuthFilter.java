@@ -8,6 +8,7 @@ import org.example.scheduler.util.exception.ErrorCode;
 
 import java.io.IOException;
 
+//로그인 여부 확인하기 위한 필터
 public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

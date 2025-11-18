@@ -21,6 +21,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
+    //댓글 추가
     @PostMapping("/api/schedules/{scheduleId}/comments")
     public ResponseEntity<CommentResponse> handlerCreateComment(
             @PathVariable Long scheduleId, @Valid @RequestBody CreateCommentRequest request, HttpSession session
@@ -32,6 +33,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    //댓글 조회
     @GetMapping("/comments")
     public ResponseEntity<List<CommentResponse>> handlerGetComment(
             @RequestParam Long scheduleId
@@ -42,6 +44,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //댓글 수정
     @PatchMapping("/api/comments/{commentId}")
     public ResponseEntity<CommentResponse> handlerUpdateComment(
             @PathVariable Long commentId, @Valid @RequestBody UpdateCommentRequest request, HttpSession session
@@ -53,6 +56,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //댓글 삭제
     @DeleteMapping("/api/{commentId}")
     public ResponseEntity<Void> handlerDelete(
             @PathVariable Long commentId, HttpSession session
@@ -64,6 +68,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    //특정 스케줄 댓글 조회
     @GetMapping("/comments/{scheduleId}")
     public ResponseEntity<Page<PagedCommentDTO>> handlerGetComments(
             @PathVariable Long scheduleId, @RequestParam(defaultValue = "0") int pageNo

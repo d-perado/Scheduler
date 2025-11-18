@@ -33,6 +33,7 @@ public class ScheduleService {
     private final CommentRepository commentRepository;
     private final Validator validator;
 
+    //일정 생성
     @Transactional
     public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
         User foundUser = userRepository.findUserByIdOrThrow(userId);
@@ -44,6 +45,7 @@ public class ScheduleService {
         return new ScheduleResponse(savedSchedule);
     }
 
+    //일정 단건 조회
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(Long scheduleId) {
         Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
@@ -51,6 +53,7 @@ public class ScheduleService {
         return new ScheduleResponse(foundSchedule);
     }
 
+    //일정 수정
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
         Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
@@ -62,6 +65,7 @@ public class ScheduleService {
         return new ScheduleResponse(foundSchedule);
     }
 
+    //일정 삭제
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
         Schedule foundSchedule = scheduleRepository.findScheduleByIdOrThrow(scheduleId);
@@ -72,10 +76,12 @@ public class ScheduleService {
         scheduleRepository.deleteById(scheduleId);
     }
 
+    //페이징된 전체 일정 조회
     @Transactional(readOnly = true)
     public Page<PagedScheduleResponse> getPagedSchedule(int pageNo, int pageSize) {
+        //페이지 리퀘스트 생성
         PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
-
+        //페이지 리퀘스트에 맞게 일정전체가져옴
         Page<Schedule> schedulePage = scheduleRepository.findAll(pageRequest);
 
         List<Schedule> pagedSchedules = schedulePage.getContent();
@@ -84,18 +90,19 @@ public class ScheduleService {
             return new PageImpl<>(Collections.emptyList(), pageRequest, schedulePage.getTotalElements());
         }
 
+        //페이지에 포함된 모든 일정 id 뽑아옴
         List<Long> scheduleIds = pagedSchedules.stream()
                 .map(Schedule::getId)
                 .collect(Collectors.toList());
-
+        //일정 리스트로 일정별 댓글 갯수 조회
         List<Tuple> commentCounts = commentRepository.countCommentsByScheduleIds(scheduleIds);
-
+        //tuple > map 변환
         Map<Long, Long> commentCountMap = commentCounts.stream()
                 .collect(Collectors.toMap(
                         tuple -> tuple.get(0, Long.class),
                         tuple -> tuple.get(1, Long.class)
                 ));
-
+        //dto변환
         List<PagedScheduleResponse> response = pagedSchedules.stream()
                 .map(scheduleItem -> {
                     long count = commentCountMap.getOrDefault(scheduleItem.getId(), 0L);//댓글갯수 0일때에도 값 넣어주기

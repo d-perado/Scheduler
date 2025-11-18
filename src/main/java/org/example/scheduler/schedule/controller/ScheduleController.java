@@ -21,6 +21,7 @@ import org.example.scheduler.schedule.service.ScheduleService;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
+    //일정 생성
     @PostMapping("/api/schedules")
     public ResponseEntity<ScheduleResponse> handlerCreateSchedule(
             @Valid @RequestBody CreateScheduleRequest request, HttpSession session
@@ -36,6 +37,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    //일정 단건 조회
     @GetMapping("/schedules/{scheduleId}")
     public ResponseEntity<ScheduleResponse> handlerGetSchedule(
             @PathVariable Long scheduleId
@@ -44,6 +46,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //일정 수정
     @PatchMapping("/api/schedules/{scheduleId}")
     public ResponseEntity<ScheduleResponse> handlerUpdateSchedule(
             @PathVariable Long scheduleId, @Valid @RequestBody UpdateScheduleRequest request, HttpSession session
@@ -59,6 +62,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    //일정 삭제
     @DeleteMapping("/api/schedules/{scheduleId}")
     public ResponseEntity<Void> handlerDeleteSchedule(
             @PathVariable Long scheduleId, HttpSession session
@@ -70,6 +74,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    //페이징 된 전체 일정 조회
     @GetMapping("/schedules/all")
     public ResponseEntity<Page<PagedScheduleResponse>> handlerGetPagedSchedule(
             @RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "0") int pageSize

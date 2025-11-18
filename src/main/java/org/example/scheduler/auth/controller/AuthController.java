@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-
+    
+    //로그인
     @PostMapping("/login")
     public ResponseEntity<Void> handlerLogin(
             @Valid @RequestBody LoginRequest request, HttpSession session) {
@@ -32,6 +33,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    //로그아웃
     @PostMapping("/api/logout")
     public ResponseEntity<Void> handlerLogout(HttpSession session) {
         session.invalidate();
