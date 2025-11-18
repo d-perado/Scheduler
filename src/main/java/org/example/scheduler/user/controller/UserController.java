@@ -52,9 +52,11 @@ public class UserController {
 
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<Void> handlerDeleteUser(
-            @PathVariable Long userId
+            @PathVariable Long userId, HttpSession session
     ) {
         userService.deleteUser(userId);
+
+        session.invalidate();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
