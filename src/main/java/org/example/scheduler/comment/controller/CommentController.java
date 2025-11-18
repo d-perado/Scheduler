@@ -29,10 +29,6 @@ public class CommentController {
     ) {
         SessionUserDTO sessionUserDTO = (SessionUserDTO) session.getAttribute("loginUser");
 
-        if (sessionUserDTO == null) {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);
-        }
-
         CommentResponse result = commentService.createComment(sessionUserDTO, scheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);

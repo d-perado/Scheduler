@@ -70,7 +70,6 @@ public class CommentService {
         commentRepository.deleteById(commentId);
     }
 
-
     @Transactional(readOnly = true)
     public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {
         Page<Comment> pagedComments = commentRepository.findCommentsBySchedule_Id(scheduleId, Pageable.ofSize(10).withPage(pageNo));

@@ -14,7 +14,6 @@ public class ErrorResponse {
     private final String codeName;
     private final String message;
 
-
     public static ResponseEntity<ErrorResponse> error(CustomException e) {
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())

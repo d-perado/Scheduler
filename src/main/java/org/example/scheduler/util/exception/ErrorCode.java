@@ -21,7 +21,6 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글 입니다."),
     COMMENT_OUT_OF_BOUND(HttpStatus.BAD_REQUEST, "작성가능한 댓글 개수가 초과 되었습니다.");
 
-
     private final HttpStatus status;
     private final String message;
 
