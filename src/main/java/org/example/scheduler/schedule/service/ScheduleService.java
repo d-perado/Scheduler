@@ -28,10 +28,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-    private final ScheduleRepository scheduleRepository;
-    private final Validator validator;
-    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
+    private final Validator validator;
 
     @Transactional
     public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
