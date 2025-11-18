@@ -8,8 +8,6 @@ import org.example.scheduler.user.dto.CreateUserRequest;
 import org.example.scheduler.user.dto.SessionUserDTO;
 import org.example.scheduler.user.dto.UpdateUserRequest;
 import org.example.scheduler.user.dto.UserResponse;
-import org.example.scheduler.util.exception.CustomException;
-import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
