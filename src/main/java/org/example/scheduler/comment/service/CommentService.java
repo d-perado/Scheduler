@@ -78,8 +78,8 @@ public class CommentService {
 
     //특정 일정에 대한 댓글 페이징 조회
     @Transactional(readOnly = true)
-    public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo) {
-        PageRequest pageRequest = PageRequest.of(pageNo, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public Page<PagedCommentDTO> getPagedComment(Long scheduleId, int pageNo, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Comment> pagedComments = commentRepository.findCommentsBySchedule_Id(scheduleId, pageRequest);
 

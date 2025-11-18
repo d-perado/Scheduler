@@ -10,6 +10,9 @@ import org.example.scheduler.comment.entity.Comment;
 import org.example.scheduler.comment.entity.QComment;
 import org.example.scheduler.schedule.entity.QSchedule;
 import org.example.scheduler.user.entity.QUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -48,5 +51,30 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .leftJoin(comment.schedule, schedule).fetchJoin()
                 .where(comment.schedule.id.eq(scheduleId))
                 .fetch();
+    }
+
+    @Override
+    public Page<Comment> findCommentsBySchedule_Id(Long scheduleId, Pageable pageable) {
+        QComment comment = QComment.comment;
+        QSchedule schedule = QSchedule.schedule;
+        QUser user = QUser.user;
+
+        List<Comment> comments = queryFactory.selectFrom(comment)
+                .leftJoin(comment.user,user).fetchJoin()
+                .leftJoin(comment.schedule,schedule).fetchJoin()
+                .where(comment.schedule.id.eq(scheduleId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(comment.createdAt.desc()).fetch();
+
+        Long pageSize = queryFactory
+                .select(comment.count())
+                .from(comment)
+                .where(comment.schedule.id.eq(scheduleId))
+                .fetchOne();
+
+        pageSize = pageSize != null ? pageSize : 0L;
+
+        return new PageImpl<>(comments,pageable,pageSize);
     }
 }

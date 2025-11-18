@@ -71,9 +71,9 @@ public class CommentController {
     //특정 스케줄 댓글 조회
     @GetMapping("/comments/{scheduleId}")
     public ResponseEntity<Page<PagedCommentDTO>> handlerGetComments(
-            @PathVariable Long scheduleId, @RequestParam(defaultValue = "0") int pageNo
+            @PathVariable Long scheduleId, @RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize
     ) {
-        Page<PagedCommentDTO> result = commentService.getPagedComment(scheduleId, pageNo);
+        Page<PagedCommentDTO> result = commentService.getPagedComment(scheduleId, pageNo, pageSize);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
