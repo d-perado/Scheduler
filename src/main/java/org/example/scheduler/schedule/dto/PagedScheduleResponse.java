@@ -15,7 +15,6 @@ public class PagedScheduleResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-
     public PagedScheduleResponse(Schedule schedule, int commentCount) {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
