@@ -13,12 +13,15 @@ import org.example.scheduler.user.entity.User;
 import org.example.scheduler.comment.repository.CommentRepository;
 import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
+import org.example.scheduler.util.exception.CustomException;
+import org.example.scheduler.util.exception.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -60,11 +63,12 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
-        boolean existence = commentRepository.existsById(commentId);
+    public void deleteComment(Long commentId,Long currentUserId) {
+        Comment comment = commentRepository.findCommentByIdOrThrow(commentId);
 
-        validator.validateCommentExists(existence);
-
+        if(!Objects.equals(comment.getUser().getId(), currentUserId)){
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
         commentRepository.deleteById(commentId);
     }
 

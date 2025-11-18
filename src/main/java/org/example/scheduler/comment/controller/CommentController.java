@@ -58,9 +58,12 @@ public class CommentController {
 
     @DeleteMapping("/api/{commentId}")
     public ResponseEntity<Void> handlerDelete(
-            @PathVariable Long commentId
+            @PathVariable Long commentId, HttpSession session
     ) {
-        commentService.deleteComment(commentId);
+        SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+        commentService.deleteComment(commentId, loginUser.getId());
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
