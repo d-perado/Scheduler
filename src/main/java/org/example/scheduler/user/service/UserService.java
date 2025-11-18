@@ -72,6 +72,7 @@ public class UserService {
         for (Schedule schedule : foundSchedule) {
             commentRepository.deleteAllBySchedule_Id(schedule.getId());
         }
+
         scheduleRepository.deleteAllByUser_Id(userId);
 
         userRepository.deleteById(userId);
