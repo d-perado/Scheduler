@@ -50,11 +50,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/users")
     public ResponseEntity<Void> handlerDeleteUser(
-            @PathVariable Long userId, HttpSession session
+            HttpSession session
     ) {
-        userService.deleteUser(userId);
+        SessionUserDTO user = (SessionUserDTO) session.getAttribute("loginUser");
+
+        userService.deleteUser(user.getId());
 
         session.invalidate();
 
