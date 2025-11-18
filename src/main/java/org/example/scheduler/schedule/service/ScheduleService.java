@@ -9,6 +9,7 @@ import org.example.scheduler.schedule.dto.CreateScheduleRequest;
 import org.example.scheduler.schedule.dto.PagedScheduleResponse;
 import org.example.scheduler.schedule.dto.ScheduleResponse;
 import org.example.scheduler.schedule.dto.UpdateScheduleRequest;
+import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,10 +31,11 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final Validator validator;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
-        User foundUser = validator.findUserByIdOrThrow(userId);
+        User foundUser = validator.findUserByIdOrThrow(userId, userRepository);
 
         Schedule schedule = new Schedule(request.getTitle(), request.getContent(), foundUser);
 
@@ -44,14 +46,14 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse getSchedule(Long scheduleId) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
 
         return new ScheduleResponse(foundSchedule);
     }
 
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, UpdateScheduleRequest request) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
 
         validator.validateScheduleOwner(userId, foundSchedule);
 
@@ -62,7 +64,7 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId) {
-        Schedule foundSchedule = validator.existScheduleById(scheduleId);
+        Schedule foundSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
 
         validator.validateScheduleOwner(userId, foundSchedule);
 

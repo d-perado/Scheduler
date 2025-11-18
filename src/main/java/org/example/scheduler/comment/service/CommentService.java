@@ -5,11 +5,13 @@ import org.example.scheduler.comment.dto.CommentResponse;
 import org.example.scheduler.comment.dto.CreateCommentRequest;
 import org.example.scheduler.comment.dto.PagedCommentDTO;
 import org.example.scheduler.comment.dto.UpdateCommentRequest;
+import org.example.scheduler.schedule.repository.ScheduleRepository;
 import org.example.scheduler.user.dto.SessionUserDTO;
 import org.example.scheduler.comment.entity.Comment;
 import org.example.scheduler.schedule.entity.Schedule;
 import org.example.scheduler.user.entity.User;
 import org.example.scheduler.comment.repository.CommentRepository;
+import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +25,14 @@ import java.util.List;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final Validator validator;
+    private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
 
     @Transactional
     public CommentResponse createComment(SessionUserDTO sessionUserDTO, Long scheduleId, CreateCommentRequest request) {
-        User currentUser = validator.findUserByIdOrThrow(sessionUserDTO.getId());
+        User currentUser = validator.findUserByIdOrThrow(sessionUserDTO.getId(), userRepository);
 
-        Schedule currentSchedule = validator.existScheduleById(scheduleId);
+        Schedule currentSchedule = validator.existScheduleById(scheduleId, scheduleRepository);
 
         Comment comment = new Comment(request.getContent(), currentUser, currentSchedule);
 
@@ -48,7 +52,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse modifyContent(UpdateCommentRequest request) {
-        Comment comment = validator.getCommentByIdOrThrow(request);
+        Comment comment = validator.getCommentByIdOrThrow(request, commentRepository);
 
         comment.modify(request.getContent());
 

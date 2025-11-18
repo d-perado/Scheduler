@@ -31,7 +31,7 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(CreateUserRequest request) {
-        validator.existUserByEmail(request.getEmail());
+        validator.existUserByEmail(request.getEmail(), userRepository);
 
         User user = new User(request.getName(),
                 request.getEmail(),
@@ -45,14 +45,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponse getUserById(Long userId) {
-        User foundUser = validator.findUserByIdOrThrow(userId);
+        User foundUser = validator.findUserByIdOrThrow(userId, userRepository);
 
         return new UserResponse(foundUser);
     }
 
     @Transactional
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User foundUser = validator.findUserByIdOrThrow(userId);
+        User foundUser = validator.findUserByIdOrThrow(userId, userRepository);
 
         foundUser.modify(request.getName(), request.getPassword(), passwordEncoder);
 
@@ -61,7 +61,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        validator.existUserById(userId);
+        validator.existUserById(userId, userRepository);
         List<Schedule> foundSchedule = scheduleRepository.findSchedulesByUser_Id(userId);
 
         for (Schedule schedule : foundSchedule) {
@@ -74,7 +74,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public SessionUserDTO login(LoginRequest request) {
-        User foundUser = validator.findUserByEmailOrThrow(request.getEmail());
+        User foundUser = validator.findUserByEmailOrThrow(request.getEmail(), userRepository);
 
         if (!foundUser.isValid(request.getPassword(), passwordEncoder)) {
             throw new CustomException(ErrorCode.INVALID_PASSWORD);

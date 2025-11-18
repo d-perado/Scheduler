@@ -15,11 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Validator {
-    private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final CommentRepository commentRepository;
 
-    public Schedule existScheduleById(Long scheduleId) {
+    public Schedule existScheduleById(Long scheduleId, ScheduleRepository scheduleRepository) {
         return scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }
 
@@ -29,12 +26,12 @@ public class Validator {
         }
     }
 
-    public User findUserByIdOrThrow(Long userId) {
+    public User findUserByIdOrThrow(Long userId, UserRepository userRepository) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public void existUserByEmail(String email) {
+    public void existUserByEmail(String email, UserRepository userRepository) {
         boolean existence = userRepository.existsByEmail(email);
 
         if (existence) {
@@ -42,7 +39,7 @@ public class Validator {
         }
     }
 
-    public void existUserById(Long userId) {
+    public void existUserById(Long userId, UserRepository userRepository) {
         boolean existence = userRepository.existsById(userId);
 
         if (!existence) {
@@ -56,12 +53,12 @@ public class Validator {
         }
     }
 
-    public Comment getCommentByIdOrThrow(UpdateCommentRequest request) {
+    public Comment getCommentByIdOrThrow(UpdateCommentRequest request, CommentRepository commentRepository) {
         return commentRepository.findById(request.getId()).orElseThrow(
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-    public User findUserByEmailOrThrow(String email) {
+    public User findUserByEmailOrThrow(String email, UserRepository userRepository) {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
