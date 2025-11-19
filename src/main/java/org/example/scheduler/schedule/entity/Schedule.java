@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.example.scheduler.util.TimeBaseEntity;
 import org.example.scheduler.user.entity.User;
 
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "schedules")

@@ -1,6 +1,7 @@
 package org.example.scheduler.schedule.service;
 
 import com.querydsl.core.Tuple;
+import org.example.scheduler.comment.entity.Comment;
 import org.example.scheduler.schedule.entity.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.user.entity.User;
@@ -11,10 +12,7 @@ import org.example.scheduler.schedule.dto.ScheduleResponse;
 import org.example.scheduler.schedule.dto.UpdateScheduleRequest;
 import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.example.scheduler.schedule.repository.ScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,5 +109,4 @@ public class ScheduleService {
 
         return new PageImpl<>(response, pageRequest, schedulePage.getTotalElements());
     }
-
 }
