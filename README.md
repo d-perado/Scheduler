@@ -9,9 +9,30 @@
 ---
 ## 3. API명세서
 [https://documenter.getpostman.com/view/24302728/2sB3Wwqx9n](https://documenter.getpostman.com/view/24302728/2sB3Wwqx9n)
+------------
+## 4. 폴더구조
+```
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── org
+    │   │       └── example
+    │   │           └── scheduler
+    │   │               ├── auth
+    │   │               ├── comment
+    │   │               ├── config
+    │   │               ├── schedule
+    │   │               ├── user
+    │   │               └── util
+    │   └── resources
+    │       ├── static
+    │       └── templates
+    ├── querydsl
+         └── java
+```
 
 ---
-## 4. 기술 스택
+## 5. 기술 스택
 
 - Java 17
 - Spring Boot 3.5.7
@@ -24,7 +45,7 @@
 
 ---
 
-## 5. 주요 기능
+## 6. 주요 기능
 
 ### 유저 (User)
 - 회원 가입 (Create)
@@ -51,7 +72,7 @@
 - 세션 기반 인증/인가
 -------
 
-## 6. 추가기능
+## 7. 추가기능
 
 ### 비밀번호 암호화
 - **at.favre.lib:bcrypt** 라이브러리를 사용하여 비밀번호를 안전하게 암호화하고, 로그인 시 비교합니다.

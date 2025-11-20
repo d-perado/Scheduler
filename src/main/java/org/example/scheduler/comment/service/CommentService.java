@@ -13,9 +13,7 @@ import org.example.scheduler.user.entity.User;
 import org.example.scheduler.comment.repository.CommentRepository;
 import org.example.scheduler.user.repository.UserRepository;
 import org.example.scheduler.util.Validator;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
